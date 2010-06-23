@@ -1,0 +1,4 @@
+.searchbar
+  %form{:"accept-charset" => "utf-8", :method => "get", :action => url_for(:jmdict, :search) }
+    %input#query{ :type => "text", :name => "query", :value => query }
+    %input#search_button{ :type => "submit", :value => "Search &rarr;" }

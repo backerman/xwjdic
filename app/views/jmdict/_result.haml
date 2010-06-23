@@ -1,0 +1,16 @@
+.entry
+  .sidebar
+    - result[:kanji].each do |k|
+      %span.kanji
+        = k[:kanji]
+    %span.readings
+      - result[:readings].each do |r|
+        %span.reading
+          &#x3014;#{r[:kana]}&#x3015;
+    %a{:href => detail_url + result[:ent_seq] }
+      (XML)
+  .main
+    %span.senses
+      - result[:senses].each do |s|
+        %span.sense
+          = s

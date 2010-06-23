@@ -1,0 +1,13 @@
+- @title = "JMDict search results: #{query}"
+:javascript
+  $(function() {
+    $(".senses .sense:not(:first-child)").addClass("left_line");
+    $(".sidebar .kanji:not(:first-child)").addClass("left_padding");
+    $(".entry:even").addClass("striped");
+  });
+.two-col
+  = partial "jmdict/searchbar", :locals => {:query => query}
+  = partial "jmdict/pagebar", :locals => paging
+  = partial "jmdict/result", :collection => results, |
+      :locals => { :detail_url => detail_url}        |
+  = partial "jmdict/pagebar", :locals => paging

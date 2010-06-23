@@ -1,0 +1,7 @@
+--- 
+:renderer: haml
+:test: shoulda
+:orm: none
+:script: jquery
+:stylesheet: sass
+:mock: none

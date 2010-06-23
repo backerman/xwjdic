@@ -1,0 +1,66 @@
+/*
+  Welcome to Compass.
+  In this file you should write your main styles. (or centralize your imports)
+  Import this file using the following HTML or equivalent:
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+@import "blueprint/reset"
+@import "blueprint"
+@import "blueprint/liquid"
+
+// Variables
+// $blueprint-grid-columns: 24
+
+$search-term-color: #f00
+$nav-bar-color: #f9f9f9
+$stripe-color: #ddd
+$blueprint-font-size: 16px
+$blueprint_liquid_container_min_width: 300px
+
+body.bp
+  +blueprint(true)
+  +blueprint-typography(true)
+
++blueprint-liquid-grid
+
+.two-col
+  +container
+  width: 90%
+  .sidebar
+    +column(24, true)
+  .main
+    +column(22, true)
+    +prepend(2)
+  .nav
+    margin: 0.5em 0em
+    background-color: $nav-bar-color
+    .prev
+      +column(1)
+      background-color: $nav-bar-color
+      margin: 0em
+      text-align: left
+    .count
+      +column(22)
+      background-color: $nav-bar-color
+      margin: 0em
+      text-align: center
+    .next
+      +column(1, true)
+      background-color: $nav-bar-color
+      margin: 0em
+      text-align: right
+
+.striped
+  background-color: $stripe-color
+
+.search_term
+  font-style: italic
+  color: $search-term-color
+
+.left_line
+  border-left: 1px solid #999
+  padding-left: 8px
+  margin-left: 4px
+
+.left_padding
+  margin-left: 0.5em

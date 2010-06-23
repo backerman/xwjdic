@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="11.2">
+    <meta>
+        <filters directoryPatterns="" filePatterns=""
+            positiveFilePatterns="" showHiddenFiles="false"/>
+        <options/>
+    </meta>
+    <projectTree name="kanjiserver.xpr">
+        <file name="autocomplete.xq"/>
+        <file name="collection.xconf"/>
+        <file name="from-index.xq"/>
+        <file name="indices.xq"/>
+        <file name="jdic.xqm"/>
+        <file name="jmdict-entry.xq"/>
+        <file name="kanjidic2-sample.xml"/>
+    </projectTree>
+</project>

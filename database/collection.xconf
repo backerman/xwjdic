@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index>
+        <!-- The character dictionary bits -->
+        <create qname="literal" type="xs:string"/>
+        <create qname="cp_value" type="xs:string"/>
+        <create qname="rad_value" type="xs:integer"/>
+        <create qname="grade" type="xs:integer"/>
+        <create qname="stroke_count" type="xs:integer"/>
+        <create qname="jlpt" type="xs:integer"/>
+        <create qname="dic_ref" type="xs:string"/>
+        <create qname="q_code" type="xs:string"/>
+        <create qname="reading" type="xs:string"/>
+        <create qname="meaning" type="xs:string"/>
+        <create qname="@m_lang" type="xs:string"/>
+        <create qname="dic_ref" type="xs:string"/>
+        
+        <!-- JMdict -->
+        <create qname="@xml:lang" type="xs:string"/>
+        <create qname="ent_seq" type="xs:integer"/>
+        <!-- Disable these two to see if indices are the problem.
+                <create qname="ke_pri" type="xs:string"/>
+                <create qname="re_pri" type="xs:string"/> -->
+        <!-- Disable the standard full text index -->
+        <fulltext default="none" attributes="no"/>
+        <!-- Lucene index is configured below -->
+        <lucene>
+	        <analyzer class="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+            <analyzer id="ws" class="org.apache.lucene.analysis.WhitespaceAnalyzer"/>
+            <text qname="entry"/>
+            <text qname="gloss"/>
+        </lucene>
+    </index>
+</collection>

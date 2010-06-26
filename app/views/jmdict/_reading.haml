@@ -1,0 +1,5 @@
+%span.reading
+  - if kanji.empty? && reading_counter == 1
+    = reading[:kana]
+  - else
+    &#x3014;#{reading[:kana]}&#x3015;

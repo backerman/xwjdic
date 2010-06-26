@@ -5,12 +5,8 @@
       %span.kanji
         = k[:kanji]
     %span.readings
-      - result[:readings].each do |r|
-        %span.reading
-          - if ! result[:kanji].empty?
-            &#x3014;#{r[:kana]}&#x3015;
-          - else
-            = r[:kana]
+      = partial "jmdict/reading", :collection => result[:readings], |
+          :locals => { :kanji => result[:kanji] }                   |
     %a{:href => detail_url + result[:ent_seq] }
       (XML)
   .main

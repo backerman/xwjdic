@@ -3,7 +3,7 @@
   $(function() {
     $(".senses .sense:not(:first-child)").addClass("left_line");
     $(".sidebar .kanji:not(:first-child)").addClass("left_padding");
-    // $(".entry:even").addClass("striped");
+    $(".entry:even").addClass("striped");
   });
 .two-col
   = partial "jmdict/searchbar", :locals => {:query => query}

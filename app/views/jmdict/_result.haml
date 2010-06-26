@@ -1,4 +1,5 @@
 .entry
+  .clear
   .sidebar
     - result[:kanji].each do |k|
       %span.kanji
@@ -6,7 +7,10 @@
     %span.readings
       - result[:readings].each do |r|
         %span.reading
-          &#x3014;#{r[:kana]}&#x3015;
+          - if ! result[:kanji].empty?
+            &#x3014;#{r[:kana]}&#x3015;
+          - else
+            = r[:kana]
     %a{:href => detail_url + result[:ent_seq] }
       (XML)
   .main
@@ -14,3 +18,4 @@
       - result[:senses].each do |s|
         %span.sense
           = s
+  .clear

@@ -3,9 +3,13 @@
   .prev
     - if prev_url
       %a{:href => prev_url}«
+    - else
+      &nbsp;
   .count
     #{start_num}&ndash;#{end_num} of #{total_hits}
   .next
     - if next_url
       %a{:href => next_url}»
+    - else
+      &nbsp;
   .clear

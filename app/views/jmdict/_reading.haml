@@ -1,5 +1,12 @@
 %span.reading
-  - if kanji.empty? && reading_counter == 1
-    = reading[:kana]
+  - restrs = reading[:restrictions].map { |k| kanji.find {|x| x[:kanji] == k } }
+  - if ! restrs.empty?
+    &#x3014;
+    %sup
+      = (restrs.map { |x| x[:footnote_number] }).join(', ')
+    #{reading[:kana]}&#x3015;
   - else
-    &#x3014;#{reading[:kana]}&#x3015;
+    - if kanji.empty? && reading_counter == 1
+      = reading[:kana]
+    - else
+      &#x3014;#{reading[:kana]}&#x3015;

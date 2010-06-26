@@ -69,8 +69,6 @@ Xwjdic.controllers :jmdict do
         locals[:paging][:prev_url] = 
           "/jmdict/text/#{query}/at/#{[start - howmany, 1].max}/by/#{howmany}"
       end
-      # FIXME: Implement those footnote
-      # marker thingies to map kanji to kana.
       render "jmdict/jmdict_results", :locals => locals
     end
   end

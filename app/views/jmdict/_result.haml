@@ -1,9 +1,7 @@
 .entry
   .clear
   .sidebar
-    - result[:kanji].each do |k|
-      %span.kanji
-        = k[:kanji]
+    = partial "jmdict/kanji", :collection => result[:kanji]
     %span.readings
       = partial "jmdict/reading", :collection => result[:readings], |
           :locals => { :kanji => result[:kanji] }                   |

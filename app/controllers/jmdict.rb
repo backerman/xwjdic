@@ -77,7 +77,14 @@ Xwjdic.controllers :jmdict do
     query_response = grab_xml(JMDICT_SEARCH, :"entry-id" => params[:ent_seq])
     xml = query_response[:xml]
     formatter = REXML::Formatters::Pretty.new
-    headword = xml.elements["//k_ele/keb"].text
+    headword_elem = xml.elements["//k_ele/keb"]
+    headword_elem = xml.elements["//r_ele/reb"] if ! headword_elem
+    headword = if headword_elem
+                  then
+                    headword_elem.text
+                  else
+                    ""
+                  end
     formatted_xml = ''
     formatter.write(xml.elements["//entry"], formatted_xml)
     locals = {:xml => formatted_xml,

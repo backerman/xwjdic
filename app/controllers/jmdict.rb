@@ -71,7 +71,6 @@ Xwjdic.controllers :jmdict do
       end
       # FIXME: Implement those footnote
       # marker thingies to map kanji to kana.
-      # FIXME: Kana-only entries shouldn't have () around them.
       render "jmdict/jmdict_results", :locals => locals
     end
   end

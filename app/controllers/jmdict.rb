@@ -19,7 +19,7 @@ Xwjdic.controllers :jmdict do
     ].each do |mapping|
     # get mapping[:sym], :map => mapping[:path] do
     get mapping[:path] do
-      query = params[:query]
+      query = URI.unescape(params[:query])
       if params[:start]
         start = params[:start].to_i
       else
@@ -51,7 +51,7 @@ Xwjdic.controllers :jmdict do
       total_hits = xml.elements["results/totalHits"].text.to_i
       locals =
         {:results => results,
-         :query => params[:query],
+         :query => query,
          :detail_url => "/jmdict/detail/",
          :paging => {
            :start_num => start,

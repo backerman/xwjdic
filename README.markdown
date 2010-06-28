@@ -8,7 +8,7 @@ My design goals for this system:
 * Usable by both humans and machines
 * Looks good (yay for [Blueprint][2])
 
-License: [WTFPL][3] for my code; this repository also includes a copy of [jQuery][4], which is licensed under the [MIT/GPLv2 (take your pick) licenses][5].  The [dictionary][6] [files][7] (available separately) are licensed under [Creative Commons Attribution-Share Alike 3.0 Unported][6].
+License: [WTFPL][3] for my code; this repository also includes a copy of [jQuery][4], which is licensed under the [MIT/GPLv2 (take your pick) licenses][5].  The [dictionary][6] [files][7] (available separately) are licensed under [Creative Commons Attribution-Share Alike 3.0 Unported][8].
 
 [1]: http://www.edrdg.org/
 [2]: http://www.blueprintcss.org/
@@ -17,5 +17,4 @@ License: [WTFPL][3] for my code; this repository also includes a copy of [jQuery
 [5]: http://jquery.org/license
 [6]: http://www.csse.monash.edu.au/~jwb/kanjidic2/index.html
 [7]: http://www.csse.monash.edu.au/~jwb/edict_doc.html
-
-[6]: http://creativecommons.org/licenses/by-sa/3.0/
+[8]: http://creativecommons.org/licenses/by-sa/3.0/

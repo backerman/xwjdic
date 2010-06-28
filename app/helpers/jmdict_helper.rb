@@ -17,7 +17,13 @@ Xwjdic.helpers do
     end
     out = ''
     gloss.each_child { |e| formatter.write(e, out) }
-    out
+    out.strip
+  end
+  
+  # Just return the text in an XML fragment -- remove all tags and
+  # attributes.
+  def just_text(xml)
+    xml.to_s.gsub(/<\/?[^>]+>/, "")
   end
 
   # Parse one <entry> element.
@@ -25,20 +31,22 @@ Xwjdic.helpers do
     res = {}
     kanji = []
     e.elements.each("k_ele/keb") do |k|
-      kanji.push({:kanji => k.text, :unique_readings => []})
+      kanji.push({:kanji => highlight_matches(k, formatter),
+                  :unique_readings => [],
+                  :ktext => just_text(k)})
     end
     res[:kanji] = kanji
     res[:char_literal] = kanji[0]
     res[:ent_seq] = e.elements["ent_seq"].text
     readings = []
     e.elements.each("r_ele") do |r|
-      reading = r.elements["reb"].text
+      reading = highlight_matches(r.elements["reb"], formatter)
       restr = []
       r.elements.each("re_restr") do |restriction|
-        applicable_kanji = restriction.text
+        applicable_kanji = just_text(restriction)
         restr.push applicable_kanji
         kanji.each do |k|
-          if k[:kanji] == applicable_kanji
+          if k[:ktext] == applicable_kanji
             k[:unique_readings].push reading
           end
         end
@@ -61,7 +69,7 @@ Xwjdic.helpers do
       gloss_text = Array.new
       s.elements.each("gloss") do |g|
         if g.attributes["xml:lang"] == "eng"
-          gloss_text.push highlight_matches(g, formatter).strip
+          gloss_text.push highlight_matches(g, formatter)
         end
       end
       senses.push gloss_text.join("; ")

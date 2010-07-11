@@ -4,8 +4,7 @@
     %meta{"http-equiv"=>"Content-Type", 
          :content=>"text/html; charset=utf-8"}/
     %title= @title
-    %link{:rel => "stylesheet", :href => "/stylesheets/application.css",
-          :type => "text/css", :media => "screen,projection"}
+    = stylesheet_link_tag :application
+    = javascript_include_tag :application, :jquery
   %body.bp
-    %script{:type => "text/javascript", :src => "/javascripts/jquery.js"}
     .content= yield

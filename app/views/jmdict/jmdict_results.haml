@@ -6,8 +6,8 @@
     $(".entry:even").addClass("striped");
   });
 .two-col
-  = partial "jmdict/searchbar", :locals => {:query => query}
-  = partial "jmdict/pagebar", :locals => paging
+  = partial "searchbar", :locals => {:query => query}
+  = partial "pagebar", :locals => paging
   = partial "jmdict/result", :collection => results, |
       :locals => { :detail_url => detail_url}        |
-  = partial "jmdict/pagebar", :locals => paging
+  = partial "pagebar", :locals => paging

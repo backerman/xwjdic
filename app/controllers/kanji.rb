@@ -52,13 +52,13 @@ Xwjdic.controllers :kanji do
          }
       if start + howmany <= total_hits
         locals[:paging][:next_url] =
-          "/jmdict/text/#{query}/at/#{start + howmany}/by/#{howmany}"
+          "/kanji/text/#{query}/at/#{start + howmany}/by/#{howmany}"
       end
       if start > 1
         locals[:paging][:prev_url] = 
-          "/jmdict/text/#{query}/at/#{[start - howmany, 1].max}/by/#{howmany}"
+          "/kanji/text/#{query}/at/#{[start - howmany, 1].max}/by/#{howmany}"
       end
-      render "jmdict/jmdict_results", :locals => locals
+      render "kanji/kanji_results", :locals => locals
     end
   end
   
@@ -78,13 +78,13 @@ Xwjdic.controllers :kanji do
     formatter.write(xml.elements["//entry"], formatted_xml)
     locals = {:xml => formatted_xml,
               :headword => headword}
-    render "jmdict/jmdict_detail", :locals => locals
+    render "kanji/kanji_detail", :locals => locals
   end
   
   get :search do
     # FIXME need to figure out how to use url command
     # successfully.
-    redirect "/jmdict/text/#{params[:query]}"
+    redirect "/kanji/text/#{params[:query]}"
   end
   
     

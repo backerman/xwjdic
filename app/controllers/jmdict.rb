@@ -19,9 +19,7 @@ Xwjdic.controllers :jmdict do
     ].each do |mapping|
     # get mapping[:sym], :map => mapping[:path] do
     get mapping[:path] do
-      # FIXME Remove URI.unescape once Padrino 0.9.14 released and
-      # insert dependency on that version or better.
-      query = URI.unescape(params[:query])
+      query = params[:query]
       if params[:start]
         start = params[:start].to_i
       else

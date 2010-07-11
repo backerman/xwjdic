@@ -4,7 +4,7 @@ import module namespace session="http://exist-db.org/xquery/session";
 
 declare function local:get-matches() as element()*
 {
-    session:create(),
+    jdic:create-session(),
     let $saved-matches := session:get-attribute("matches")
     return
         if ($saved-matches)
@@ -25,7 +25,7 @@ declare function local:query-matches-and-save() as element()*
                         else ()
         order by $entry//grade empty greatest
         return $entry
-    let $saveme := session:set-attribute("matches", $matches)
+    let $saveme := jdic:set-attribute("matches", $matches)
     return $matches
 };
 

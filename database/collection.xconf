@@ -29,6 +29,7 @@
             <analyzer id="ws" class="org.apache.lucene.analysis.WhitespaceAnalyzer"/>
             <text qname="entry"/>
             <text qname="gloss"/>
+            <text qname="character"/>
         </lucene>
     </index>
 </collection>

@@ -8,6 +8,8 @@ require "compass"
 Xwjdic.controllers :jmdict do
   
   JMDICT_SEARCH = "jmdict-entry.xq"
+  SESSION_QUERY = :jmdict_query
+  SESSION_ID    = :jmdict_query_session
   
   get :index do
     render 'jmdict/index'
@@ -35,9 +37,9 @@ Xwjdic.controllers :jmdict do
         :_start => start,
         :_howmany => howmany
       }
-      if session.has_key?(:db_session)
-        if session[:saved_query] == query
-          db_query[:_session] = session[:db_session]
+      if session.has_key?(SESSION_QUERY)
+        if session[SESSION_QUERY] == query
+          db_query[:_session] = session[SESSION_ID]
         else
           # FIXME: Expire that session
         end
@@ -46,8 +48,8 @@ Xwjdic.controllers :jmdict do
       xml = query_response[:xml]
       session_id = query_response[:session_id]
       results = parse_jmdict_results(xml)
-      session[:db_session] = session_id
-      session[:saved_query] = query
+      session[SESSION_ID] = session_id
+      session[SESSION_QUERY] = query
       total_hits = xml.elements["results/totalHits"].text.to_i
       locals =
         {:results => results,

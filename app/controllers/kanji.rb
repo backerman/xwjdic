@@ -1,14 +1,14 @@
 Xwjdic.controllers :kanji do
   KANJIDIC_SEARCH = "kanji-query.xq"
+  SESSION_QUERY   = :kanjidic_query
+  SESSION_ID      = :kanjidic_query_session
   
   [{:sym => :text, :path => '/text/:query'},
     {:sym => :textat, :path => '/text/:query/at/:start'}, 
     {:sym => :textatby, :path => '/text/:query/at/:start/by/:howmany'}
     ].each do |mapping|
     get mapping[:path] do
-      # FIXME Remove URI.unescape once Padrino 0.9.14 released and
-      # insert dependency on that version or better.
-      query = URI.unescape(params[:query])
+      query = params[:query]
       if params[:start]
         start = params[:start].to_i
       else
@@ -24,9 +24,9 @@ Xwjdic.controllers :kanji do
         :_start => start,
         :_howmany => howmany
       }
-      if session.has_key?(:db_session)
-        if session[:saved_query] == query
-          db_query[:_session] = session[:db_session]
+      if session.has_key?(SESSION_ID)
+        if session[SESSION_QUERY] == query
+          db_query[:_session] = session[SESSION_ID]
         else
           # FIXME: Expire that session
         end
@@ -35,8 +35,8 @@ Xwjdic.controllers :kanji do
       xml = query_response[:xml]
       session_id = query_response[:session_id]
       results = parse_jmdict_results(xml)
-      session[:db_session] = session_id
-      session[:saved_query] = query
+      session[SESSION_ID] = session_id
+      session[SESSION_QUERY] = query
       total_hits = xml.elements["results/totalHits"].text.to_i
       locals =
         {:results => results,

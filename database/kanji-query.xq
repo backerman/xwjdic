@@ -14,12 +14,12 @@ declare function local:get-matches() as element()*
 
 declare function local:query-matches-and-save() as element()*
 {
-    let $entry-id := request:get-parameter("literal", "", false())
+    let $literal := request:get-parameter("literal", "", false())
     let $search-term := request:get-parameter("query", "fool", false())
     let $matches :=
-        for $character in 
-            if ($literal) 
-                then //character[literal = $entry-id]
+        for $entry in 
+            if ($literal)
+                then //character[literal = $literal]
                 else if ($search-term) 
                         then //character[ft:query(., $search-term)]
                         else ()

@@ -1,9 +1,10 @@
 .entry
   .clear
   .sidebar
-    = result[:character]
+    = result[:kanji]
     %span.readings
-      = partial "kanji/reading", :collection => result[:readings]
+      = partial "kanji/reading", :collection =>          |
+       result[:readings].select {|x| x[:type] =~ /^ja_/} |
     %a{:href => detail_url + result[:kanji] }
       (XML)
   .main

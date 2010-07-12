@@ -6,7 +6,7 @@
     $(".entry:even").addClass("striped");
   });
 .two-col
-  = partial "searchbar", :locals => {:query => query}
+  = partial "kanji/searchbar", :locals => {:query => query}
   = partial "pagebar", :locals => paging
   = partial "kanji/result", :collection => results, |
       :locals => { :detail_url => detail_url}          |

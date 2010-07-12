@@ -8,6 +8,6 @@
 .two-col
   = partial "searchbar", :locals => {:query => query}
   = partial "pagebar", :locals => paging
-  = partial "kanjidic/result", :collection => results, |
+  = partial "kanji/result", :collection => results, |
       :locals => { :detail_url => detail_url}          |
   = partial "pagebar", :locals => paging

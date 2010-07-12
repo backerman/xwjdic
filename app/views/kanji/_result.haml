@@ -4,7 +4,7 @@
     = result[:character]
     %span.readings
       = partial "kanji/reading", :collection => result[:readings]
-    %a{:href => detail_url + result[:ent_seq] }
+    %a{:href => detail_url + result[:kanji] }
       (XML)
   .main
     %span.senses

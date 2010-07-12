@@ -1,7 +1,8 @@
 Xwjdic.controllers :kanji do
+
   KANJIDIC_SEARCH = "kanji-query.xq"
-  SESSION_QUERY   = :kanjidic_query
-  SESSION_ID      = :kanjidic_query_session
+  KANJIDIC_SESSION_QUERY   = :kanjidic_query
+  KANJIDIC_SESSION_ID      = :kanjidic_query_session
   
   [{:sym => :text, :path => '/text/:query'},
     {:sym => :textat, :path => '/text/:query/at/:start'}, 
@@ -24,19 +25,19 @@ Xwjdic.controllers :kanji do
         :_start => start,
         :_howmany => howmany
       }
-      if session.has_key?(SESSION_ID)
-        if session[SESSION_QUERY] == query
-          db_query[:_session] = session[SESSION_ID]
+      if session.has_key?(KANJIDIC_SESSION_ID)
+        if session[KANJIDIC_SESSION_QUERY] == query
+          db_query[:_session] = session[KANJIDIC_SESSION_ID]
         else
           # FIXME: Expire that session
         end
       end
-      query_response = grab_xml(JMDICT_SEARCH, db_query)
+      query_response = grab_xml(KANJIDIC_SEARCH, db_query)
       xml = query_response[:xml]
       session_id = query_response[:session_id]
-      results = parse_jmdict_results(xml)
-      session[SESSION_ID] = session_id
-      session[SESSION_QUERY] = query
+      results = parse_kanjidic_results(xml)
+      session[KANJIDIC_SESSION_ID] = session_id
+      session[KANJIDIC_SESSION_QUERY] = query
       total_hits = xml.elements["results/totalHits"].text.to_i
       locals =
         {:results => results,

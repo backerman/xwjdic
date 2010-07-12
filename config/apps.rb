@@ -25,4 +25,5 @@ However, the mounted core can be modified as needed:
 =end
 
 # Mounts the core application for this project
-Padrino.mount_core("Xwjdic")
+# Padrino.mount_core("Xwjdic")
+Padrino.mount("Xwjdic").to("/")

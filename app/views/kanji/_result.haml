@@ -1,0 +1,14 @@
+.entry
+  .clear
+  .sidebar
+    = result[:character]
+    %span.readings
+      = partial "kanji/reading", :collection => result[:readings]
+    %a{:href => detail_url + result[:ent_seq] }
+      (XML)
+  .main
+    %span.senses
+      - result[:senses].each do |s|
+        %span.sense
+          = s
+  .clear

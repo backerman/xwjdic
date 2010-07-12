@@ -21,7 +21,7 @@ declare function jdic:jmdict-priority($entry as element()) as xs:string
 
 declare function jdic:create-session() as empty()
 {
-    if (session:exists())
+    if (request:exists())
         then session:create()
         else ()
 };

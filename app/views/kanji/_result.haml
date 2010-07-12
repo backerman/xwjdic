@@ -4,8 +4,8 @@
     = result[:kanji]
     %span.readings
       = partial "kanji/reading", :collection =>          |
-       result[:readings].select {|x| x[:type] =~ /^ja_/} |
-    %a{:href => detail_url + result[:kanji] }
+       result[:readings].select {|x| x[:type] =~ /^((ja_)|(nanori))/} |
+    %a{:href => detail_url + result[:kanji_text] }
       (XML)
   .main
     %span.senses

@@ -10,6 +10,7 @@ Xwjdic.helpers do
     
     res = {}
     res[:kanji] = matches e.elements["literal"]
+    res[:kanji_text] = just_text res[:kanji]
     # FIXME associate readings w meanings within rmgroup
     readings = []
     e.elements.each("//reading") do |r|
@@ -17,8 +18,11 @@ Xwjdic.helpers do
       type    = r.attributes["r_type"]
       readings.push({:reading => reading, :type => type})
     end
+    e.elements.each("//nanori") do |n|
+      readings.push({:reading => matches(n), :type => "nanori"})
+    end
     res[:readings] = readings
-
+    
     # Senses
     senses = Array.new
     e.elements.each("//meaning") do |m|
@@ -33,9 +37,6 @@ Xwjdic.helpers do
 
   def parse_kanjidic_results(xml)
     @formatter = REXML::Formatters::Default.new
-    out = ''
-    @formatter.write(xml,out)
-    puts "Got results: #{out}"
     results = Array.new
     xml.elements.each("//character") do |e|
       results.push parse_kanjidic_entry(e)

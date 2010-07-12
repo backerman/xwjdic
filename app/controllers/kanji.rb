@@ -42,7 +42,7 @@ Xwjdic.controllers :kanji do
       locals =
         {:results => results,
          :query => query,
-         :detail_url => "/jmdict/detail/",
+         :detail_url => "/kanji/detail/",
          :paging => {
            :start_num => start,
            :end_num => [start + howmany - 1, total_hits].min,
@@ -63,22 +63,15 @@ Xwjdic.controllers :kanji do
     end
   end
   
-  get '/detail/:ent_seq' do
-    query_response = grab_xml(JMDICT_SEARCH, :"entry-id" => params[:ent_seq])
+  get '/detail/:character' do
+    query_response = grab_xml(KANJIDIC_SEARCH, :literal => params[:character])
     xml = query_response[:xml]
     formatter = REXML::Formatters::Pretty.new
-    headword_elem = xml.elements["//k_ele/keb"]
-    headword_elem = xml.elements["//r_ele/reb"] if ! headword_elem
-    headword = if headword_elem
-                  then
-                    headword_elem.text
-                  else
-                    ""
-                  end
+    character = xml.elements["//literal"]
     formatted_xml = ''
-    formatter.write(xml.elements["//entry"], formatted_xml)
+    formatter.write(xml.elements["//character"], formatted_xml)
     locals = {:xml => formatted_xml,
-              :headword => headword}
+              :character => character}
     render "kanji/kanji_detail", :locals => locals
   end
   

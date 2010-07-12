@@ -12,6 +12,6 @@
         <file name="indices.xq"/>
         <file name="jdic.xqm"/>
         <file name="jmdict-entry.xq"/>
-        <file name="kanjidic2-sample.xml"/>
+        <file name="kanji-query.xq"/>
     </projectTree>
 </project>

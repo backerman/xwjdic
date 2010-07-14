@@ -10,6 +10,14 @@ My design goals for this system:
 
 License: [WTFPL][3] for my code; this repository also includes a copy of [jQuery][4], which is licensed under the [MIT/GPLv2 (take your pick) licenses][5].  The [dictionary][6] [files][7] (available separately) are licensed under [Creative Commons Attribution-Share Alike 3.0 Unported][8].
 
+## Installation notes ##
+
+Remove "thin" from the Gemfile before deploying with Passenger.
+
+FreeBSD requires `/usr/ports/converters/ruby-iconv` to be installed for activesupport
+to work properly.
+
+
 [1]: http://www.edrdg.org/
 [2]: http://www.blueprintcss.org/
 [3]: http://sam.zoy.org/wtfpl/

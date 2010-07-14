@@ -5,7 +5,7 @@
   <property name="xquery.dir" location="database"/>
   
   <!-- Import site-based parameters (to include user/pass) -->
-  <xmlproperty file="deploy-config.xml" />
+  <xmlproperty file="deploy-config.xml" keepRoot="false"/>
   
   <!-- Derived properties -->
   <property name="db.uri.prefix"
@@ -30,28 +30,44 @@
   </typedef>
   
   <!-- Here begins the real work. -->
-  <target name="clean">
+  
+  <target name="check-deployed">
+    <condition property="already-deployed">
+        <xdb:exist xmlns:xdb="http://exist-db.org/ant" uri="${db.uri.prefix}"
+          resource="${collection.name}"/>
+    </condition>
+  </target>
+  
+  <target name="clean" depends="check-deployed" if="already-deployed">
     <xdb:remove xmlns:xdb="http://exist-db.org/ant" uri="${db.uri.prefix}"
-      collection="${collection.name}"/>
+      collection="${collection.name}" user="${deploy.user}"
+      password="${deploy.pass}" failonerror="false"/>
     <xdb:remove xmlns:xdb="http://exist-db.org/ant" uri="${db.config.uri.prefix}"
-      collection="${collection.name}"/>
+      collection="${collection.name}" user="${deploy.user}"
+      password="${deploy.pass}" failonerror="false"/>
   </target>
   
   <target name="deploy-xquery" depends="clean">
+    <echo message="Deploying stored XQueries"/>
     <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.uri}"
-        createcollection="true">
+        createcollection="true" user="${deploy.user}"
+        password="${deploy.pass}">
         <fileset dir="${xquery.dir}"> 
             <include name="*.xq"/>
             <include name="*.xqm"/>
         </fileset>
     </xdb:store>
     <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.config.uri}"
-        createcollection="true" srcfile="${xquery.dir}/collection.xconf"/>
+        createcollection="true" createsubcollections="true"
+        srcfile="${xquery.dir}/collection.xconf"
+        user="${deploy.user}" password="${deploy.pass}"/>
   </target>
   
   <target name="deploy-data" depends="clean">
+    <echo message="Deploying dictionary data"/>
     <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.uri}"
-        createcollection="true">
+        createcollection="true" user="${deploy.user}"
+        password="${deploy.pass}">
         <fileset dir="${data.dir}"> 
             <include name="*.xml"/>
         </fileset>

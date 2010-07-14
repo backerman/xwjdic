@@ -9,7 +9,7 @@
   
   <!-- Derived properties -->
   <property name="db.uri.prefix"
-    value="xmldb:exist://${deploy.host}:${deploy.port}/exist/xmlrpc/db"/>
+    value="${deploy.uri}/xmlrpc/db"/>
   <property name="db.uri"
     value="${db.uri.prefix}/${collection.name}"/>
   <property name="db.config.uri.prefix"
@@ -31,14 +31,15 @@
   
   <!-- Here begins the real work. -->
   
-  <target name="check-deployed">
-    <condition property="already-deployed">
-        <xdb:exist xmlns:xdb="http://exist-db.org/ant" uri="${db.uri.prefix}"
-          resource="${collection.name}"/>
-    </condition>
+  <target name="lockdown-permissions"
+    description="Remove global update privileges from database.">
+    <loadfile property="xquery" srcFile="lockdown-db.xq"/>
+    <xdb:xquery  xmlns:xdb="http://exist-db.org/ant"
+      uri="${db.uri}" user="${deploy.user}"
+      password="${deploy.pass}" query="${xquery}"/>    
   </target>
   
-  <target name="clean" depends="check-deployed" if="already-deployed">
+  <target name="clean">
     <xdb:remove xmlns:xdb="http://exist-db.org/ant" uri="${db.uri.prefix}"
       collection="${collection.name}" user="${deploy.user}"
       password="${deploy.pass}" failonerror="false"/>
@@ -47,7 +48,7 @@
       password="${deploy.pass}" failonerror="false"/>
   </target>
   
-  <target name="deploy-xquery" depends="clean">
+  <target name="deploy-xquery">
     <echo message="Deploying stored XQueries"/>
     <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.uri}"
         createcollection="true" user="${deploy.user}"
@@ -63,7 +64,7 @@
         user="${deploy.user}" password="${deploy.pass}"/>
   </target>
   
-  <target name="deploy-data" depends="clean">
+  <target name="deploy-data">
     <echo message="Deploying dictionary data"/>
     <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.uri}"
         createcollection="true" user="${deploy.user}"
@@ -72,6 +73,26 @@
             <include name="*.xml"/>
         </fileset>
     </xdb:store>
+  </target>
+  
+  <target name="reindex">
+    <!-- Shouldn't need this since we're deploying the collection.xconf
+         file before the dictionary data. -->
+    <echo message="Reindexing database"/>
+    <loadfile property="xquery" srcFile="reindex-db.xq">
+      <filterchain>
+        <expandproperties/>
+      </filterchain>
+    </loadfile>
+    <xdb:xquery  xmlns:xdb="http://exist-db.org/ant"
+      uri="${db.uri}" user="${deploy.user}"
+      password="${deploy.pass}" query="${xquery}"/>
+  </target>
+  
+  <target name="shutdown" description="Shut down eXist server">
+      <xdb:shutdown xmlns:xdb="http://exist-db.org/ant" 
+        uri="${db.uri}" user="${deploy.user}"
+        password="${deploy.pass}"/>
   </target>
   
   <target name="deploy" depends="deploy-xquery,deploy-data">

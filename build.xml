@@ -1,0 +1,10 @@
+<project name="DeployDb" default="deploy-xquery" basedir=".">
+  <description>
+    Deploy database files to the eXist server.
+  </description>
+  <property name="xquery-dir" location="database"/>
+  
+  <!-- Import site-based parameters (to include user/pass) -->
+  <xmlproperty file="deploy-config.xml" />
+  
+</project>

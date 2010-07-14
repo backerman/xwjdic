@@ -10,14 +10,20 @@
   -->
   
   <!-- The base directory of a local eXist installation. -->
-  <exist-dir>~/Applications/exist</exist-dir>
+  <exist.dir>~/Applications/exist</exist.dir>
+  
+  <!-- Where to find the dictionary data to deploy -->
+  <data.dir>~/src/xjdic-dicfiles</data.dir>
   
   <!-- The host to deploy to. -->
-  <host>localhost</host>
-  <port>8081</port>
+  <deploy.host>localhost</deploy.host>
+  <deploy.port>8081</deploy.port>
   
   <!-- Username and password to authenticate to the remote database. -->
-  <username>admin</username>
-  <password>xyzzy</password>
+  <deploy.user>admin</deploy.user>
+  <deploy.pass>xyzzy</deploy.pass>
   
+  <!-- Name of collection to store this stuff in -->
+  <collection.name>jdic</collection.name>
+
 </config>

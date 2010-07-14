@@ -1,10 +1,64 @@
-<project name="DeployDb" default="deploy-xquery" basedir=".">
+<project name="DeployDb" default="deploy" basedir=".">
   <description>
     Deploy database files to the eXist server.
   </description>
-  <property name="xquery-dir" location="database"/>
+  <property name="xquery.dir" location="database"/>
   
   <!-- Import site-based parameters (to include user/pass) -->
   <xmlproperty file="deploy-config.xml" />
+  
+  <!-- Derived properties -->
+  <property name="db.uri.prefix"
+    value="xmldb:exist://${deploy.host}:${deploy.port}/exist/xmlrpc/db"/>
+  <property name="db.uri"
+    value="${db.uri.prefix}/${collection.name}"/>
+  <property name="db.config.uri.prefix"
+    value="${db.uri.prefix}/system/config/db"/>
+  <property name="db.config.uri"
+    value="${db.config.uri.prefix}/${collection.name}"/>
+  
+  <!-- Include Ant tasks from eXist distribution -->
+  <path id="classpath.core">
+      <fileset dir="${exist.dir}/lib/core">
+          <include name="*.jar"/>
+      </fileset>
+      <pathelement path="${exist.dir}/exist.jar"/>
+      <pathelement path="${exist.dir}/exist-optional.jar"/>
+  </path>
+  <typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+      <classpath refid="classpath.core"/>
+  </typedef>
+  
+  <!-- Here begins the real work. -->
+  <target name="clean">
+    <xdb:remove xmlns:xdb="http://exist-db.org/ant" uri="${db.uri.prefix}"
+      collection="${collection.name}"/>
+    <xdb:remove xmlns:xdb="http://exist-db.org/ant" uri="${db.config.uri.prefix}"
+      collection="${collection.name}"/>
+  </target>
+  
+  <target name="deploy-xquery" depends="clean">
+    <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.uri}"
+        createcollection="true">
+        <fileset dir="${xquery.dir}"> 
+            <include name="*.xq"/>
+            <include name="*.xqm"/>
+        </fileset>
+    </xdb:store>
+    <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.config.uri}"
+        createcollection="true" srcfile="${xquery.dir}/collection.xconf"/>
+  </target>
+  
+  <target name="deploy-data" depends="clean">
+    <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.uri}"
+        createcollection="true">
+        <fileset dir="${data.dir}"> 
+            <include name="*.xml"/>
+        </fileset>
+    </xdb:store>
+  </target>
+  
+  <target name="deploy" depends="deploy-xquery,deploy-data">
+  </target>
   
 </project>

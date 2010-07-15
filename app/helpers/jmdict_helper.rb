@@ -33,9 +33,9 @@ Xwjdic.helpers do
     kanji = []
     kebs = e.find("k_ele/keb")
     kebs.each do |k|
-      kanji.push {:kanji => highlight_matches k,
+      kanji.push({:kanji => highlight_matches(k),
                   :unique_readings => [],
-                  :ktext => just_text k}
+                  :ktext => just_text(k)})
     end
     res[:kanji] = kanji
     res[:char_literal] = kanji[0]
@@ -55,7 +55,7 @@ Xwjdic.helpers do
           end
         end
       end
-      readings.push {:kana => reading, :restrictions => restr}
+      readings.push({:kana => reading, :restrictions => restr})
     end
     # Assign footnote numbers to each k_ele w/ special readings
     current_num = 0

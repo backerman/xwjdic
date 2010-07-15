@@ -18,3 +18,4 @@ gem 'padrino', ">= 0.9.14"
 # xwjdic requirements
 gem 'cookiejar'
 gem 'compass'
+gem 'libxml-ruby'

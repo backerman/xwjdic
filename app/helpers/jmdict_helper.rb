@@ -1,23 +1,24 @@
 # Helper methods defined here can be accessed in any controller or view in the application
 
 require "cookiejar"
-require "rexml/element"
-require "rexml/formatters/default"
+require "libxml"
 
 Xwjdic.helpers do
   
   DB_URL = "http://localhost:8080/exist/rest/db/jdic/"
   
-  def highlight_matches(gloss, formatter)
-    gloss.elements.each("exist:match") do |m|
-      match_el = REXML::Element.new("span")
+  def highlight_matches(gloss)
+    matches = gloss.find("exist:match", 
+      "exist:http://exist.sourceforge.net/NS/exist")
+    matches.each do |m|
+      match_el = LibXML::XML::Node.new("span")
       match_el.attributes["class"] = "search_term"
-      match_el.text = m.text
-      m.replace_with(match_el)
+      match_el.content = m.content
+      # Replace m with match_el
+      m.next = match_el
+      m.remove!
     end
-    out = ''
-    gloss.each_child { |e| formatter.write(e, out) }
-    out.strip
+    gloss.inner_xml.strip
   end
   
   # Just return the text in an XML fragment -- remove all tags and
@@ -27,23 +28,26 @@ Xwjdic.helpers do
   end
 
   # Parse one <entry> element.
-  def parse_jmdict_entry(e, formatter)
+  def parse_jmdict_entry(e)
     res = {}
     kanji = []
-    e.elements.each("k_ele/keb") do |k|
-      kanji.push({:kanji => highlight_matches(k, formatter),
+    kebs = e.find("k_ele/keb")
+    kebs.each do |k|
+      kanji.push {:kanji => highlight_matches k,
                   :unique_readings => [],
-                  :ktext => just_text(k)})
+                  :ktext => just_text k}
     end
     res[:kanji] = kanji
     res[:char_literal] = kanji[0]
-    res[:ent_seq] = e.elements["ent_seq"].text
+    res[:ent_seq] = e.find_first("ent_seq").content
     readings = []
-    e.elements.each("r_ele") do |r|
-      reading = highlight_matches(r.elements["reb"], formatter)
+    r_eles = e.find("r_ele")
+    r_eles.each do |r|
+      reading = highlight_matches r.find_first("reb")
       restr = []
-      r.elements.each("re_restr") do |restriction|
-        applicable_kanji = just_text(restriction)
+      re_restrs = e.find("re_restr")
+      re_restrs.each do |restriction|
+        applicable_kanji = just_text restriction
         restr.push applicable_kanji
         kanji.each do |k|
           if k[:ktext] == applicable_kanji
@@ -51,7 +55,7 @@ Xwjdic.helpers do
           end
         end
       end
-      readings.push({:kana => reading, :restrictions => restr})
+      readings.push {:kana => reading, :restrictions => restr}
     end
     # Assign footnote numbers to each k_ele w/ special readings
     current_num = 0
@@ -65,11 +69,13 @@ Xwjdic.helpers do
 
     # Senses
     senses = Array.new
-    e.elements.each("sense") do |s|
+    sense_elems = e.find("sense")
+    sense_elems.each do |s|
       gloss_text = Array.new
-      s.elements.each("gloss") do |g|
+      glosses = s.find("gloss")
+      glosses.each do |g|
         if g.attributes["xml:lang"] == "eng"
-          gloss_text.push highlight_matches(g, formatter)
+          gloss_text.push highlight_matches(g)
         end
       end
       senses.push gloss_text.join("; ")
@@ -79,10 +85,10 @@ Xwjdic.helpers do
   end
 
   def parse_jmdict_results(xml)
-    formatter = REXML::Formatters::Default.new
     results = Array.new
-    xml.elements.each("//entry") do |e|
-      results.push parse_jmdict_entry(e, formatter)
+    entries = xml.find("//entry")
+    entries.each do |e|
+      results.push parse_jmdict_entry(e)
     end
     results
   end
@@ -108,7 +114,7 @@ Xwjdic.helpers do
       new_session = cookie.value
     end
     # FIXME: Assumes there's only one cookie.
-    { :xml => REXML::Document.new(res.body),
+    { :xml => LibXML::XML::Document.string(res.body),
       :session_id => new_session }
   end
   

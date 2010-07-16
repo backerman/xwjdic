@@ -50,7 +50,7 @@ Xwjdic.controllers :jmdict do
       results = parse_jmdict_results(xml)
       session[JMDICT_SESSION_ID] = session_id
       session[JMDICT_SESSION_QUERY] = query
-      total_hits = xml.elements["results/totalHits"].text.to_i
+      total_hits = xml.find_first("/results/totalHits").content.to_i
       locals =
         {:results => results,
          :query => query,
@@ -78,17 +78,15 @@ Xwjdic.controllers :jmdict do
   get '/detail/:ent_seq' do
     query_response = grab_xml(JMDICT_SEARCH, :"entry-id" => params[:ent_seq])
     xml = query_response[:xml]
-    formatter = REXML::Formatters::Pretty.new
-    headword_elem = xml.elements["//k_ele/keb"]
-    headword_elem = xml.elements["//r_ele/reb"] if ! headword_elem
+    headword_elem = xml.find_first("//k_ele/keb")
+    headword_elem = xml.find_first("//r_ele/reb") if ! headword_elem
     headword = if headword_elem
                   then
-                    headword_elem.text
+                    headword_elem.content
                   else
                     ""
                   end
-    formatted_xml = ''
-    formatter.write(xml.elements["//entry"], formatted_xml)
+    formatted_xml = xml.find_first("//entry").to_s
     locals = {:xml => formatted_xml,
               :headword => headword}
     render "jmdict/jmdict_detail", :locals => locals

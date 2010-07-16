@@ -45,8 +45,9 @@ Xwjdic.helpers do
     r_eles.each do |r|
       reading = highlight_matches(r.find_first("reb"))
       restr = []
-      re_restrs = e.find("re_restr")
+      re_restrs = r.find("./re_restr")
       re_restrs.each do |restriction|
+        puts "Found a restriction: #{restriction.to_s}"
         applicable_kanji = just_text restriction
         restr.push applicable_kanji
         kanji.each do |k|

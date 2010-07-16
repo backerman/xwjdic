@@ -38,7 +38,7 @@ Xwjdic.controllers :kanji do
       results = parse_kanjidic_results(xml)
       session[KANJIDIC_SESSION_ID] = session_id
       session[KANJIDIC_SESSION_QUERY] = query
-      total_hits = xml.elements["results/totalHits"].text.to_i
+      total_hits = xml.find_first("totalHits").content.to_i
       locals =
         {:results => results,
          :query => query,
@@ -66,12 +66,9 @@ Xwjdic.controllers :kanji do
   get '/detail/:character' do
     query_response = grab_xml(KANJIDIC_SEARCH, :literal => params[:character])
     xml = query_response[:xml]
-    formatter = REXML::Formatters::Pretty.new
-    character = xml.elements["//literal"]
-    formatted_xml = ''
-    formatter.write(xml.elements["//character"], formatted_xml)
-    locals = {:xml => formatted_xml,
-              :character => character}
+    literal = xml.find_first("//literal")
+    locals = {:xml => xml.find_first("character").to_s,
+              :character => literal.content}
     render "kanji/kanji_detail", :locals => locals
   end
   

@@ -51,7 +51,6 @@ Xwjdic.helpers do
       restr = []
       re_restrs = r.find("./re_restr")
       re_restrs.each do |restriction|
-        puts "Found a restriction: #{restriction.to_s}"
         applicable_kanji = just_text restriction
         restr.push applicable_kanji
         kanji.each do |k|
@@ -83,7 +82,7 @@ Xwjdic.helpers do
           gloss_text.push highlight_matches(g)
         end
       end
-      senses.push gloss_text.join("; ")
+      senses.push gloss_text.join("; ") unless gloss_text.empty?
     end
     res[:senses] = senses
     res

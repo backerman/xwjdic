@@ -6,7 +6,7 @@ require "libxml"
 Xwjdic.helpers do
   
   if production?
-    DB_URL = "http://localhost:8080/rest/db/jdic/"
+    DB_URL = "http://localhost:8080/db/jdic/"
   else
     DB_URL = "http://localhost:8080/exist/rest/db/jdic/"
   end

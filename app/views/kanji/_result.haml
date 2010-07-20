@@ -2,6 +2,7 @@
   .clear
   .sidebar
     = result[:kanji]
+    U#{result[:unicode_hex]}
     %a{:href => detail_url + result[:kanji_text] }
       (XML)
   .main

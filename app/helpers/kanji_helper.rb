@@ -17,7 +17,7 @@ Xwjdic.helpers do
       readings.push({:reading => reading, :type => type})
     end
     nanori = e.find(".//nanori")
-    nanori_txt = []
+    nanori_txt = Array.new
     nanori.each do |n|
       this_reading = highlight_matches(n)
       readings.push({:reading => this_reading, :type => "nanori"})
@@ -41,6 +41,22 @@ Xwjdic.helpers do
       end
     end
     res[:senses] = senses
+    
+    # Code points
+    codepoints = Array.new
+    cp_elems = e.find("./codepoint/cp_value")
+    unicode_val = nil
+    cp_elems.each do |cp|
+      this_cp = Hash.new
+      this_cp[:type] = cp.attributes["cp_type"]
+      this_cp[:value] = highlight_matches(cp)
+      if this_cp[:type] == "ucs"
+        unicode_val = this_cp[:value]
+      end
+      codepoints.push(this_cp)
+    end
+    res[:codepoints] = codepoints
+    res[:unicode_hex] = unicode_val
     
     res
   end

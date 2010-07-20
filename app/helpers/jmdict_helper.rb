@@ -5,7 +5,11 @@ require "libxml"
 
 Xwjdic.helpers do
   
-  DB_URL = "http://localhost:8080/exist/rest/db/jdic/"
+  if production?
+    DB_URL = "http://localhost:8080/rest/db/jdic/"
+  else
+    DB_URL = "http://localhost:8080/exist/rest/db/jdic/"
+  end
   
   def highlight_matches(gloss)
     matches = gloss.find("exist:match", 

@@ -3,7 +3,7 @@ source :rubygems
 # Project requirements
 gem 'rake'
 gem 'rack-flash'
-gem 'thin' # or mongrel
+gem 'thin', :group => "development"
 
 # Component requirements
 gem 'haml'

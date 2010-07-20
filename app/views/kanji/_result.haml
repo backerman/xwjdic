@@ -5,15 +5,11 @@
     %a{:href => detail_url + result[:kanji_text] }
       (XML)
   .main
-    %span.senses
-      = result[:senses].join("; ")
     .readings
-      = partial "kanji/reading", :collection =>              |
-       result[:readings].select {|x| x[:type] =~ /^ja_/}     |
-    - if result[:readings].detect {|x| x[:type] == "nanori"}
-      .senses
-        Name readings:
+      #{result[:japanese]}
+    .senses
+      = result[:senses].join("; ")
+    - if result[:nanori]
       .readings
-        = partial "kanji/reading", :collection =>              |
-         result[:readings].select {|x| x[:type] == "nanori"}  |
+        Name readings: #{result[:nanori]}
   .clear

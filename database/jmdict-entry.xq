@@ -4,7 +4,7 @@ import module namespace session="http://exist-db.org/xquery/session";
 
 declare function local:get-matches() as element()*
 {
-    session:create(),
+    jdic:create-session(),
     let $saved-matches := session:get-attribute("matches")
     return
         if ($saved-matches)
@@ -12,10 +12,26 @@ declare function local:get-matches() as element()*
             else local:query-matches-and-save()
 };
 
+declare function local:is-match($elem as element()) as xs:boolean
+{
+    let $match-elem := $elem//exist:match
+    return if (
+        $match-elem/ancestor::ent_seq or 
+        $match-elem/ancestor::k_ele or 
+        $match-elem/ancestor::r_ele or
+        $match-elem/ancestor::info or
+        $match-elem/ancestor::gloss[empty(@xml:lang) or @xml:lang="eng"] or
+        $match-elem/ancestor::xref or
+        $match-elem/ancestor::misc or
+        $match-elem/ancestor::info)
+            then true()
+            else false()
+};
+
 declare function local:query-matches-and-save() as element()*
 {
     let $entry-id := request:get-parameter("entry-id", "", false())
-    let $search-term := request:get-parameter("query", "fool", false())
+    let $search-term := request:get-parameter("query", "gift", false())
     let $matches :=
         for $entry in 
             if ($entry-id) 
@@ -25,8 +41,14 @@ declare function local:query-matches-and-save() as element()*
                         else ()
         order by $entry/k_ele[1]/ke_pri[starts-with(text(), 'nf')] empty greatest
         return $entry
-    let $saveme := session:set-attribute("matches", $matches)
-    return $matches
+    let $matches2 :=
+        if ($entry-id)
+            then $matches
+            else for $entry in util:expand($matches, "expand-xincludes=no")
+                where local:is-match($entry)
+                return $entry
+    let $saveme := jdic:set-attribute("matches", $matches2)
+    return $matches2
 };
 
 let $start := xs:integer(request:get-parameter("_start", "1", false()))
@@ -35,5 +57,5 @@ let $matches := local:get-matches()
 
 return <results>
 <totalHits>{ count($matches) }</totalHits>
-{util:expand(subsequence($matches, $start, $how-many), "expand-xincludes=no")} 
+{subsequence($matches, $start, $how-many)} 
 </results>

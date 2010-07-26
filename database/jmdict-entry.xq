@@ -15,7 +15,7 @@ declare function local:get-matches() as element()*
 declare function local:is-match($elem as element()) as xs:boolean
 {
     let $match-elem := $elem//exist:match
-    return if (
+    return (
         $match-elem/ancestor::ent_seq or 
         $match-elem/ancestor::k_ele or 
         $match-elem/ancestor::r_ele or
@@ -24,8 +24,6 @@ declare function local:is-match($elem as element()) as xs:boolean
         $match-elem/ancestor::xref or
         $match-elem/ancestor::misc or
         $match-elem/ancestor::info)
-            then true()
-            else false()
 };
 
 declare function local:query-matches-and-save() as element()*

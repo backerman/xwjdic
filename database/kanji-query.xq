@@ -41,9 +41,11 @@ declare function local:query-matches-and-save() as element()*
         order by $entry//grade empty greatest
         return $entry
     let $matches2 :=
-        for $entry in util:expand($matches, "expand-xincludes=no")
-        where local:is-match($entry)
-        return $entry
+        if ($literal)
+            then $matches
+            else for $entry in util:expand($matches, "expand-xincludes=no")
+                where local:is-match($entry)
+                return $entry
     let $saveme := jdic:set-attribute("matches", $matches2)
     return $matches2
 };

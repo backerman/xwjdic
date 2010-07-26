@@ -12,24 +12,36 @@ declare function local:get-matches() as element()*
             else local:query-matches-and-save()
 };
 
-declare function local:is-match($elem as element()) as xs:boolean
+declare function local:is-match($elem as element(), $langs as xs:string+)
+    as xs:boolean
 {
     let $match-elem := $elem//exist:match
-    return (
-        $match-elem/ancestor::ent_seq or 
-        $match-elem/ancestor::k_ele or 
-        $match-elem/ancestor::r_ele or
-        $match-elem/ancestor::info or
-        $match-elem/ancestor::gloss[empty(@xml:lang) or @xml:lang="eng"] or
-        $match-elem/ancestor::xref or
-        $match-elem/ancestor::misc or
-        $match-elem/ancestor::info)
+    return ($match-elem/ancestor::ent_seq or 
+            $match-elem/ancestor::k_ele or 
+            $match-elem/ancestor::r_ele or
+            $match-elem/ancestor::info or
+            local:language-specific-match($match-elem, $langs) or
+            $match-elem/ancestor::xref or
+            $match-elem/ancestor::misc or
+            $match-elem/ancestor::info)
+};
+
+declare function local:language-specific-match($elem as element()+,
+                                               $langs as xs:string+)
+    as xs:boolean
+{
+    some $lang in $langs satisfies
+        if ($lang = "eng")
+            then $elem/ancestor::gloss[empty(@xml:lang) or @xml:lang="eng"]
+            else $elem/ancestor::gloss[@xml:lang = $lang]
 };
 
 declare function local:query-matches-and-save() as element()*
 {
     let $entry-id := request:get-parameter("entry-id", "", false())
     let $search-term := request:get-parameter("query", "gift", false())
+    let $lang-str := request:get-parameter("languages", "eng", false())
+    let $acceptable-languages := jdic:split-language-list($lang-str)
     let $matches :=
         for $entry in 
             if ($entry-id) 
@@ -43,7 +55,7 @@ declare function local:query-matches-and-save() as element()*
         if ($entry-id)
             then $matches
             else for $entry in util:expand($matches, "expand-xincludes=no")
-                where local:is-match($entry)
+                where local:is-match($entry, $acceptable-languages)
                 return $entry
     let $saveme := jdic:set-attribute("matches", $matches2)
     return $matches2

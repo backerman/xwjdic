@@ -19,6 +19,17 @@ declare function jdic:jmdict-priority($entry as element()) as xs:string
         else "zzz"
 };
 
+(: Parse a list of acceptable language codes.
+   e.g. "eng, deu, esp" returns ("eng", "deu", "esp") :)
+declare function jdic:split-language-list($codes as xs:string) as xs:string*
+{
+    tokenize($codes, ",");
+};
+
+(: Wrapper functions for eXist session library -- check first to see if
+   we're being called from an HTTP request, and if not, don't try to 
+   do things that will fail. :)
+
 declare function jdic:create-session() as empty()
 {
     if (request:exists())

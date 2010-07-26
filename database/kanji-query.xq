@@ -16,12 +16,15 @@ declare function local:get-matches() as element()*
 declare function local:is-match($elem as element()) as xs:boolean
 {
     let $match-elem := $elem//exist:match
-    return if ($match-elem/ancestor::codepoint or 
+    return if (
+        $match-elem/ancestor::literal or 
+        $match-elem/ancestor::codepoint or 
         $match-elem/ancestor::radical or
         $match-elem/ancestor::misc or
         $match-elem/ancestor::dic_number or
         $match-elem/ancestor::query_code or
         $match-elem/ancestor::reading or
+        $match-elem/ancestor::nanori or
         $match-elem/ancestor-or-self::meaning[empty(@m_lang)] )
             then true()
             else false()

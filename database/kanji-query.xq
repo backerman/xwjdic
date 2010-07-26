@@ -17,20 +17,15 @@ declare function local:is-match($elem as element(), $langs as xs:string+)
     as xs:boolean
 {
     let $match-elem := $elem//exist:match
-    return
-        if (
-            $match-elem/ancestor::literal or 
+    return ($match-elem/ancestor::literal or 
             $match-elem/ancestor::codepoint or 
             $match-elem/ancestor::radical or
             $match-elem/ancestor::misc or
             $match-elem/ancestor::dic_number or
             $match-elem/ancestor::query_code or
             $match-elem/ancestor::reading or
-            $match-elem/ancestor::nanori)
-        then true()
-        else if (local:language-specific-match($match-elem, $langs))
-            then true()
-            else false()    
+            $match-elem/ancestor::nanori or
+            local:language-specific-match($match-elem, $langs))   
 };
 
 declare function local:language-specific-match($elem as element()+,

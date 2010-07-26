@@ -5,6 +5,7 @@
          :content=>"text/html; charset=utf-8"}/
     %title= @title
     = stylesheet_link_tag :application
-    = javascript_include_tag :application, :jquery
+    = stylesheet_link_tag :"cupertino/jquery-ui"
+    = javascript_include_tag :application, :jquery, :"jquery-ui"
   %body.bp
     .content= yield

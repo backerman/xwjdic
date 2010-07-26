@@ -13,25 +13,42 @@ declare function local:get-matches() as element()*
             else local:query-matches-and-save()
 };
 
-declare function local:is-match($elem as element()) as xs:boolean
+declare function local:is-match($elem as element(), $langs as xs:string+) 
+    as xs:boolean
 {
     let $match-elem := $elem//exist:match
-    return (
-        $match-elem/ancestor::literal or 
-        $match-elem/ancestor::codepoint or 
-        $match-elem/ancestor::radical or
-        $match-elem/ancestor::misc or
-        $match-elem/ancestor::dic_number or
-        $match-elem/ancestor::query_code or
-        $match-elem/ancestor::reading or
-        $match-elem/ancestor::nanori or
-        $match-elem/ancestor-or-self::meaning[empty(@m_lang)] )
+    return
+        if (
+            $match-elem/ancestor::literal or 
+            $match-elem/ancestor::codepoint or 
+            $match-elem/ancestor::radical or
+            $match-elem/ancestor::misc or
+            $match-elem/ancestor::dic_number or
+            $match-elem/ancestor::query_code or
+            $match-elem/ancestor::reading or
+            $match-elem/ancestor::nanori)
+        then true()
+        else if (local:language-specific-match($match-elem, $langs))
+            then true()
+            else false()    
+};
+
+declare function local:language-specific-match($elem as element()+,
+                                               $langs as xs:string+)
+    as xs:boolean
+{
+    some $lang in $langs satisfies
+        if ($lang = "en")
+            then $elem/ancestor-or-self::meaning[empty(@m_lang)]
+            else $elem/ancestor-or-self::meaning[@m_lang = $lang]
 };
 
 declare function local:query-matches-and-save() as element()*
 {
     let $literal := request:get-parameter("literal", "", false())
     let $search-term := request:get-parameter("query", "fo*", false())
+    let $lang-str := request:get-parameter("languages", "en", false())
+    let $acceptable-languages := jdic:split-language-list($lang-str)
     let $matches :=
         for $entry in 
             if ($literal)
@@ -45,7 +62,7 @@ declare function local:query-matches-and-save() as element()*
         if ($literal)
             then $matches
             else for $entry in util:expand($matches, "expand-xincludes=no")
-                where local:is-match($entry)
+                where local:is-match($entry, $acceptable-languages)
                 return $entry
     let $saveme := jdic:set-attribute("matches", $matches2)
     return $matches2

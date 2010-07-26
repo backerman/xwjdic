@@ -23,7 +23,7 @@ declare function jdic:jmdict-priority($entry as element()) as xs:string
    e.g. "eng, deu, esp" returns ("eng", "deu", "esp") :)
 declare function jdic:split-language-list($codes as xs:string) as xs:string*
 {
-    tokenize($codes, ",");
+    tokenize($codes, ",")
 };
 
 (: Wrapper functions for eXist session library -- check first to see if

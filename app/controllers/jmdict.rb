@@ -106,13 +106,22 @@ Xwjdic.controllers :jmdict do
     res = Array.new
     entries = xml.find("//entry")
     entries.each do |entry|
+      gloss = just_text(entry.find_first("gloss")).strip
       res.push({
-        :ent_seq => entry.find_first("ent_seq").content,
-        :gloss => highlight_matches(entry.find_first("gloss"))
+        :id => entry.find_first("ent_seq").content,
+        :label => gloss,
+        :value => gloss
       })
     end
     
-    res.to_json
+    res_deduped = Array.new
+    res.each do |r|
+        if ! res_deduped.detect {|x| x[:label] == r[:label] }
+          res_deduped.push r
+        end
+    end
+    
+    res_deduped.to_json
   end
   
 end

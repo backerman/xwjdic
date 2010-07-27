@@ -1,4 +1,17 @@
+:javascript
+  $(function() {
+    $("#query").autocomplete({
+            source: "#{url_for(:jmdict, :autocomplete)}",
+            minLength: 3,
+            select: function(event, ui) {
+              if (ui.item) {
+                window.location = "/jmdict/text/" + ui.item.value;
+              }
+            }
+    })
+  });
 .searchbar
   %form{:"accept-charset" => "utf-8", :method => "get", :action => url_for(:jmdict, :search) }
-    %input#query{ :type => "text", :name => "query", :value => query }
-    %input#search_button{ :type => "submit", :value => "Search &rarr;" }
+    .ui-widget
+      %input#query{ :type => "text", :name => "query", :value => "" }
+      %input#search_button{ :type => "submit", :value => "Search &rarr;" }

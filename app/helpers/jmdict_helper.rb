@@ -102,7 +102,7 @@ Xwjdic.helpers do
     escaped_params = params.map { |name, value| \
       name.to_s + "=" + CGI.escape(value.to_s) }
     my_url = DB_URL + xquery + "?" + escaped_params.join('&')
-    puts "Querying: #{my_url}"
+    # puts "Querying: #{my_url}"
     uri = URI.parse(my_url)
     request = Net::HTTP::Get.new(uri.request_uri)
     http = Net::HTTP.new(uri.host, uri.port)

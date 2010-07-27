@@ -52,7 +52,12 @@ Xwjdic.controllers :jmdict do
       results = parse_jmdict_results(xml)
       session[JMDICT_SESSION_ID] = session_id
       session[JMDICT_SESSION_QUERY] = query
-      total_hits = xml.find_first("/results/totalHits").content.to_i
+      totalhits_elem = xml.find_first("/results/totalHits")
+      if totalhits_elem
+        total_hits = totalhits_elem.content.to_i
+      else
+        total_hits = 0
+      end
       locals =
         {:results => results,
          :query => query,

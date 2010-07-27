@@ -11,7 +11,7 @@ declare function local:language-specific-match($elem as element()+,
             else $elem//exist:match/ancestor::gloss[@xml:lang = $lang]
 };
 
-let $search-term := jdic:param("query", "cart")
+let $search-term := jdic:param("query", "foo")
 let $lang-str := request:get-parameter("languages", "eng", false())
 let $acceptable-languages := jdic:split-language-list($lang-str)
 let $search := concat($search-term, "*")
@@ -22,10 +22,15 @@ let $my-lang-hits :=
     return $hit
 let $ordered-hits := 
     for $hit in $my-lang-hits
-    order by $hit//ke_pri[starts-with(text(), "nf")] empty greatest
+    order by $hit/k_ele[1]/ke_pri[starts-with(text(), 'nf')] empty greatest
     return $hit
-for $entry in subsequence($ordered-hits, 1, 10)
-return <entry>
-{$entry/ent_seq}
-{$entry//gloss[exist:match and local:language-specific-match(., $acceptable-languages)]}
-</entry>
+let $results := 
+    for $entry in subsequence($ordered-hits, 1, 10)
+        return <entry>
+        {$entry/ent_seq}
+        {$entry//gloss[exist:match and 
+            local:language-specific-match(., $acceptable-languages)]}
+        </entry>
+return <autocomplete-results>
+            {$results}
+       </autocomplete-results>

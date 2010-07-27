@@ -19,3 +19,4 @@ gem 'padrino', ">= 0.9.14"
 gem 'cookiejar'
 gem 'compass'
 gem 'libxml-ruby'
+gem 'json'

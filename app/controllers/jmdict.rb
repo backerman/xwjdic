@@ -4,10 +4,12 @@ require "cgi"
 require "rexml/document"
 require "rexml/formatters/pretty"
 require "compass"
+require "json"
 
 Xwjdic.controllers :jmdict do
   
   JMDICT_SEARCH = "jmdict-entry.xq"
+  JMDICT_AUTOCOMPLETE = "autocomplete.xq"
   JMDICT_SESSION_QUERY = :jmdict_query
   JMDICT_SESSION_ID    = :jmdict_query_session
   
@@ -96,6 +98,21 @@ Xwjdic.controllers :jmdict do
     # FIXME need to figure out how to use url command
     # successfully.
     redirect "/jmdict/text/#{params[:query]}"
+  end
+  
+  get :autocomplete, :provides => [:json] do
+    query_response = grab_xml(JMDICT_AUTOCOMPLETE, :query => params[:term])
+    xml = query_response[:xml]
+    res = Array.new
+    entries = xml.find("//entry")
+    entries.each do |entry|
+      res.push({
+        :ent_seq => entry.find_first("ent_seq").content,
+        :gloss => highlight_matches(entry.find_first("gloss"))
+      })
+    end
+    
+    res.to_json
   end
   
 end

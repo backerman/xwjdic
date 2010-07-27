@@ -102,7 +102,7 @@ Xwjdic.helpers do
     escaped_params = params.map { |name, value| \
       name.to_s + "=" + CGI.escape(value.to_s) }
     my_url = DB_URL + xquery + "?" + escaped_params.join('&')
-    # puts "Querying: #{my_url}"
+    puts "Querying: #{my_url}"
     uri = URI.parse(my_url)
     request = Net::HTTP::Get.new(uri.request_uri)
     http = Net::HTTP.new(uri.host, uri.port)
@@ -112,13 +112,20 @@ Xwjdic.helpers do
     if params[:_session]
       new_session = params[:_session]
     else
-      cookie = CookieJar::Cookie.from_set_cookie(
-        my_url, res["Set-Cookie"])
-      new_session = cookie.value
+      if res["Set-Cookie"]
+        cookie = CookieJar::Cookie.from_set_cookie(
+          my_url, res["Set-Cookie"])
+          new_session = cookie.value
+      else
+        new_session = nil
+      end
     end
     # FIXME: Assumes there's only one cookie.
-    { :xml => LibXML::XML::Document.string(res.body),
-      :session_id => new_session }
+    retval = { :xml => LibXML::XML::Document.string(res.body) }
+    if new_session
+      retval[:session_id] = new_session
+    end
+    retval
   end
   
 end

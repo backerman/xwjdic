@@ -106,8 +106,8 @@ Xwjdic.helpers do
     uri = URI.parse(my_url)
     request = Net::HTTP::Get.new(uri.request_uri)
     http = Net::HTTP.new(uri.host, uri.port)
-    http.open_timeout = 5 # in seconds
-    http.read_timeout = 5 # in seconds
+    http.open_timeout = 10 # in seconds
+    http.read_timeout = 10 # in seconds
     res = http.request(request)
     if params[:_session]
       new_session = params[:_session]

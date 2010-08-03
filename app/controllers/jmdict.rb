@@ -114,8 +114,13 @@ Xwjdic.controllers :jmdict do
       gloss = just_text(entry.find_first("gloss")).strip
       res.push({
         :id => entry.find_first("ent_seq").content,
-        :label => gloss,
-        :value => gloss
+        :value => if gloss.include? " "
+                  then
+                    '"' + gloss + '"'
+                  else 
+                    gloss
+                  end,
+        :label => gloss
       })
     end
     

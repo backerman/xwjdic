@@ -108,6 +108,7 @@ Xwjdic.helpers do
     http = Net::HTTP.new(uri.host, uri.port)
     http.open_timeout = 10 # in seconds
     http.read_timeout = 10 # in seconds
+    # FIXME catch timeout and redirect to error page.
     res = http.request(request)
     if params[:_session]
       new_session = params[:_session]

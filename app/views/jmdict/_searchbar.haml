@@ -3,6 +3,7 @@
     $("#query").autocomplete({
             source: "#{url_for(:jmdict, :autocomplete)}",
             minLength: 3,
+            delay: 500,
             select: function(event, ui) {
               if (ui.item) {
                 window.location = "/jmdict/text/" + ui.item.value;

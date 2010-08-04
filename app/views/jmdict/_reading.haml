@@ -1,5 +1,5 @@
 %span.reading
-  - restrs = reading[:restrictions].map { |k| kanji.find {|x| x[:kanji] == k } }
+  - restrs = reading[:restrictions].map { |k| kanji.find {|x| x[:ktext] == k } }
   - if ! restrs.empty?
     &#x3014;
     %sup

@@ -29,7 +29,7 @@ Xwjdic.helpers do
   # Just return the text in an XML fragment -- remove all tags and
   # attributes.
   def just_text(xml)
-    xml.to_s.gsub(/<\/?[^>]+>/, "")
+    xml.to_s.gsub(/<\/?[^>]+>/, "").strip
   end
 
   # Parse one <entry> element.

@@ -2,6 +2,7 @@
 
 require "cookiejar"
 require "libxml"
+require "typhoeus"
 
 Xwjdic.helpers do
   
@@ -99,30 +100,22 @@ Xwjdic.helpers do
   end
   
   def grab_xml(xquery, params)
-    escaped_params = params.map { |name, value| \
-      name.to_s + "=" + CGI.escape(value.to_s) }
-    my_url = DB_URL + xquery + "?" + escaped_params.join('&')
-    # puts "Querying: #{my_url}"
-    uri = URI.parse(my_url)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.open_timeout = 10 # in seconds
-    http.read_timeout = 10 # in seconds
-    # FIXME catch timeout and redirect to error page.
-    res = http.request(request)
+    my_url = DB_URL + xquery
+    response = Typhoeus::Request.get(my_url,
+                                    :params => params)
     if params[:_session]
       new_session = params[:_session]
     else
-      if res["Set-Cookie"]
+      if response.headers_hash["Set-Cookie"]
         cookie = CookieJar::Cookie.from_set_cookie(
-          my_url, res["Set-Cookie"])
+          my_url, response.headers_hash["Set-Cookie"])
           new_session = cookie.value
       else
         new_session = nil
       end
     end
     # FIXME: Assumes there's only one cookie.
-    retval = { :xml => LibXML::XML::Document.string(res.body) }
+    retval = { :xml => LibXML::XML::Document.string(response.body) }
     if new_session
       retval[:session_id] = new_session
     end

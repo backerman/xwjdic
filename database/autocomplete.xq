@@ -12,10 +12,11 @@ declare function local:language-specific-match($elem as element()+,
 };
 
 let $search-term := jdic:param("query", "foo")
+let $filter-regex := concat("^(.*\W)?", $search-term)
 let $lang-str := request:get-parameter("languages", "eng", false())
 let $acceptable-languages := jdic:split-language-list($lang-str)
-let $search := concat($search-term, "*")
-let $all-hits := //gloss[ft:query(., $search)]/ancestor::entry
+let $all-hits := //gloss[ngram:contains(., $search-term) 
+                         and matches(., $filter-regex)]/ancestor::entry
 let $my-lang-hits := 
     for $hit in util:expand($all-hits, "expand-xincludes=no")
     where local:language-specific-match($hit, $acceptable-languages)

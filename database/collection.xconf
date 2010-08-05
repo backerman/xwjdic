@@ -18,6 +18,9 @@
         <!-- JMdict -->
         <create qname="@xml:lang" type="xs:string"/>
         <create qname="ent_seq" type="xs:integer"/>
+        <ngram qname="keb"/>
+        <ngram qname="reb"/>
+        <ngram qname="gloss"/>
         <!-- Disable these two to see if indices are the problem.
                 <create qname="ke_pri" type="xs:string"/>
                 <create qname="re_pri" type="xs:string"/> -->

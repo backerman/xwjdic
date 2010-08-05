@@ -111,7 +111,7 @@ Xwjdic.controllers :jmdict do
     res = Array.new
     entries = xml.find("//entry")
     entries.each do |entry|
-      gloss = just_text(entry.find_first("gloss")).strip
+      gloss = just_text(entry.find_first("gloss"))
       res.push({
         :id => entry.find_first("ent_seq").content,
         :value => if gloss.include? " "

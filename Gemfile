@@ -14,6 +14,7 @@ gem 'rack-test', :require => 'rack/test', :group => 'test'
 
 # Padrino
 gem 'padrino', ">= 0.9.14"
+gem 'sinatra', '1.1.0'
 
 # xwjdic requirements
 gem 'cookiejar'

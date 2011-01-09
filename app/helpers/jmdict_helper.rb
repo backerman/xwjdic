@@ -9,7 +9,7 @@ Xwjdic.helpers do
   if production?
     DB_URL = "http://localhost:8080/db/jdic/"
   else
-    DB_URL = "http://localhost:8080/exist/rest/db/jdic/"
+    DB_URL = "http://localhost:8088/db/jdic/"
   end
   
   def highlight_matches(gloss)

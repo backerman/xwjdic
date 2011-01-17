@@ -101,18 +101,19 @@ Xwjdic.helpers do
   
   def grab_xml(xquery, params)
     my_url = DB_URL + xquery
+    logger.debug "Querying #{my_url} with parms #{params.inspect}"
     response = Typhoeus::Request.get(my_url,
                                     :params => params)
     retval = {
       :code => response.code,
       :status_message => response.status_message
     }
-    
+    logger.debug "Returned; #{retval.inspect}"
     if response.code == 200
       # Successful query.
       retval[:error] = false
       retval[:xml]= LibXML::XML::Document.string(response.body)
-    elsif response.code >= 500 && response.code < 600
+    elsif response.code >= 400 && response.code < 600
       # Fail.  Possibly the user tried a stupid search
       # e.g. "a*"
       retval[:error] = true
@@ -129,9 +130,9 @@ EOF
     if params[:_session]
       new_session = params[:_session]
     else
-      if response.headers_hash["Set-Cookie"]
-        cookie = CookieJar::Cookie.from_set_cookie(
-          my_url, response.headers_hash["Set-Cookie"])
+      rhh_sc = response.headers_hash["Set-Cookie"]
+      if rhh_sc && rhh_sc.is_a?(String)
+          cookie = CookieJar::Cookie.from_set_cookie(my_url, rhh_sc)
           new_session = cookie.value
       else
         new_session = nil

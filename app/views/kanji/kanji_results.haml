@@ -7,6 +7,8 @@
   });
 .two-col
   = partial "kanji/searchbar", :locals => {:query => query}
+  - if error
+    .error= error_message
   = partial "pagebar", :locals => paging
   = partial "kanji/result", :collection => results, |
       :locals => { :detail_url => detail_url}          |

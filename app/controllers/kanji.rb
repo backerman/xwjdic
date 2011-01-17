@@ -35,6 +35,7 @@ Xwjdic.controllers :kanji do
       query_response = grab_xml(KANJIDIC_SEARCH, db_query)
       xml = query_response[:xml]
       session_id = query_response[:session_id]
+      error = query_response[:error]
       results = parse_kanjidic_results(xml)
       session[KANJIDIC_SESSION_ID] = session_id
       session[KANJIDIC_SESSION_QUERY] = query
@@ -47,6 +48,7 @@ Xwjdic.controllers :kanji do
       locals =
         {:results => results,
          :query => query,
+         :error => error,
          :detail_url => "/kanji/detail/",
          :paging => {
            :start_num => start,
@@ -56,6 +58,17 @@ Xwjdic.controllers :kanji do
            :prev_url => false
           }
          }
+      if error
+        if production?
+          locals[:error_message] = <<ERR
+  Your search has generated an error.  If you used a wildcard, please ensure that
+  your search was not excessively broad (e.g. just *).  This error has been logged.
+ERR
+        else
+          locals[:error_message] = query_response[:status_message]
+        end
+      end
+
       if start + howmany <= total_hits
         locals[:paging][:next_url] =
           "/kanji/text/#{query}/at/#{start + howmany}/by/#{howmany}"

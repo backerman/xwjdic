@@ -49,7 +49,7 @@ declare function local:query-matches-and-save() as element()*
             if ($literal)
                 then //character[literal = $literal]
                 else if ($search-term) 
-                        then //character[ft:query(., $search-term)]
+                        then /kanjidic2/ft:query(character, $search-term)
                         else ()
         order by $entry//grade empty greatest
         return $entry

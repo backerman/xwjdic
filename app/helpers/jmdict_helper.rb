@@ -103,6 +103,29 @@ Xwjdic.helpers do
     my_url = DB_URL + xquery
     response = Typhoeus::Request.get(my_url,
                                     :params => params)
+    retval = {
+      :code => response.code,
+      :status_message => response.status_message
+    }
+    
+    if response.code == 200
+      # Successful query.
+      retval[:error] = false
+      retval[:xml]= LibXML::XML::Document.string(response.body)
+    elsif response.code >= 500 && response.code < 600
+      # Fail.  Possibly the user tried a stupid search
+      # e.g. "a*"
+      retval[:error] = true
+      # Put in a dummy XML body.
+      dummy_body = <<EOF
+<entry>
+</entry>
+EOF
+      retval[:xml] = LibXML::XML::Document.string(dummy_body)
+    end
+
+    # Get the session ID to keep with data --
+    # this allows database-side paging to work.
     if params[:_session]
       new_session = params[:_session]
     else
@@ -114,11 +137,11 @@ Xwjdic.helpers do
         new_session = nil
       end
     end
-    # FIXME: Assumes there's only one cookie.
-    retval = { :xml => LibXML::XML::Document.string(response.body) }
+    
     if new_session
       retval[:session_id] = new_session
     end
+    
     retval
   end
   

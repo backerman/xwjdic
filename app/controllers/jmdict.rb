@@ -49,6 +49,7 @@ Xwjdic.controllers :jmdict do
       query_response = grab_xml(JMDICT_SEARCH, db_query)
       xml = query_response[:xml]
       session_id = query_response[:session_id]
+      error = query_response[:error]
       results = parse_jmdict_results(xml)
       session[JMDICT_SESSION_ID] = session_id
       session[JMDICT_SESSION_QUERY] = query
@@ -61,6 +62,7 @@ Xwjdic.controllers :jmdict do
       locals =
         {:results => results,
          :query => query,
+         :error => error,
          :detail_url => "/jmdict/detail/",
          :paging => {
            :start_num => start,
@@ -78,6 +80,17 @@ Xwjdic.controllers :jmdict do
         locals[:paging][:prev_url] = 
           "/jmdict/text/#{query}/at/#{[start - howmany, 1].max}/by/#{howmany}"
       end
+      if error
+        if production?
+          locals[:error_message] = <<ERR
+Your search has generated an error.  If you used a wildcard, please ensure that
+your search was not excessively broad (e.g. just *).  This error has been logged.
+ERR
+        else
+          locals[:error_message] = query_response[:status_message]
+        end
+      end
+         
       render "jmdict/jmdict_results", :locals => locals
     end
   end

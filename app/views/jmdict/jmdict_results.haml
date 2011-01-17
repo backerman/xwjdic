@@ -7,6 +7,8 @@
   });
 .two-col
   = partial "jmdict/searchbar", :locals => {:query => query}
+  - if error
+    .error= error_message
   = partial "pagebar", :locals => paging
   = partial "jmdict/result", :collection => results, |
       :locals => { :detail_url => detail_url}        |

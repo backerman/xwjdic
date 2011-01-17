@@ -16,6 +16,7 @@ $nav-bar-color: #f9f9f9
 $stripe-color: #ddd
 $blueprint-font-size: 16px
 $blueprint_liquid_container_min_width: 300px
+$error-color: red
 
 body.bp
   +blueprint(true)
@@ -27,6 +28,8 @@ body.bp
   +container
   width: 90%
   .sidebar
+    +column(24, true)
+  .error
     +column(24, true)
   .main
     +column(22, true)
@@ -61,3 +64,9 @@ body.bp
 
 .left_padding
   margin-left: 0.5em
+
+/*.error
+  border: 1px solid
+  margin: 1em
+  text-color: $error-color
+  */

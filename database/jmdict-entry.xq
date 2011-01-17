@@ -49,7 +49,7 @@ declare function local:query-matches-and-save() as element()*
                 else if ($search-term) 
                         then /JMdict/ft:query(entry, $search-term)
                         else ()
-        order by $entry/k_ele[1]/ke_pri[starts-with(text(), 'nf')] empty greatest
+        order by $entry/k_ele[1]/ke_pri[starts-with(text(), 'nf')][1] empty greatest
         return $entry
     let $matches2 :=
         if ($entry-id)

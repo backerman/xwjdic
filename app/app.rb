@@ -14,5 +14,6 @@ class Xwjdic < Padrino::Application
   # disable :padrino_helpers    # Disables padrino markup helpers (enabled by default if present)
   # disable :padrino_mailer     # Disables padrino mailer (enabled by default if present)
   enable :sessions
-  layout :layout  
+  layout :layout
+  set :haml, :format => :html5
 end

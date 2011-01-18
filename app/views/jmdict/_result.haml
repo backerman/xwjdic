@@ -5,7 +5,7 @@
     %span.readings
       = partial "jmdict/reading", :collection => result[:readings], |
           :locals => { :kanji => result[:kanji] }                   |
-    %a{:href => detail_url + result[:ent_seq] }
+    %a{:href => detail_url + result[:ent_seq], :target => "_blank"}
       (XML)
   .main
     %span.senses

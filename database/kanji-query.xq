@@ -13,10 +13,17 @@ declare function local:get-matches() as element()*
             else local:query-matches-and-save()
 };
 
-declare function local:is-match($elem as element(), $langs as xs:string+) 
+declare function local:strip-string($str as xs:string)
+{
+  replace($str, "[?*.]+", "")
+};
+
+declare function local:is-match($elem as element(), $langs as xs:string+,
+                                $search-term as xs:string) 
     as xs:boolean
 {
-    let $match-elem := $elem//exist:match
+    let $match-elem := $elem//exist:match[
+        contains(local:strip-string(.), local:strip-string($search-term))]
     return ($match-elem/ancestor::literal or 
             $match-elem/ancestor::codepoint or 
             $match-elem/ancestor::radical or
@@ -28,7 +35,7 @@ declare function local:is-match($elem as element(), $langs as xs:string+)
             local:language-specific-match($match-elem, $langs))   
 };
 
-declare function local:language-specific-match($elem as element()+,
+declare function local:language-specific-match($elem as element()*,
                                                $langs as xs:string+)
     as xs:boolean
 {
@@ -57,7 +64,7 @@ declare function local:query-matches-and-save() as element()*
         if ($literal)
             then $matches
             else for $entry in util:expand($matches, "expand-xincludes=no")
-                where local:is-match($entry, $acceptable-languages)
+                where local:is-match($entry, $acceptable-languages, $search-term)
                 return $entry
     let $saveme := jdic:set-attribute("matches", $matches2)
     return $matches2

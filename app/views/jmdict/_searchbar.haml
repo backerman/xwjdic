@@ -1,5 +1,6 @@
 :javascript
   $(function() {
+    $("#search_button").button();
     $("#query").autocomplete({
             source: "#{url_for(:jmdict, :autocomplete)}",
             minLength: 3,
@@ -10,9 +11,10 @@
               }
             }
     })
-  });
+  })
 .searchbar
   %form{:"accept-charset" => "utf-8", :method => "get", :action => url_for(:jmdict, :search) }
     .ui-widget
-      %input#query{ :type => "text", :name => "query", :value => "" }
+      %input#query{ :type => "text", :name => "query", :value => query, |
+      :placeholder=> "Enter your search term"}                          |
       %input#search_button{ :type => "submit", :value => "Search &rarr;" }

@@ -8,9 +8,9 @@
   .main
     .readings
       #{result[:japanese]}
+      - if result[:nanori]
+        %br
+        Name readings: #{result[:nanori]}
     .senses
       = result[:senses].join("; ")
-    - if result[:nanori]
-      .readings
-        Name readings: #{result[:nanori]}
   .clear

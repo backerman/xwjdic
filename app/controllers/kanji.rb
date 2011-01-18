@@ -9,7 +9,7 @@ Xwjdic.controllers :kanji do
     {:sym => :textatby, :path => '/text/:query/at/:start/by/:howmany'}
     ].each do |mapping|
     get mapping[:path] do
-      query = params[:query]
+      query = params[:query].strip
       if params[:start]
         start = params[:start].to_i
       else

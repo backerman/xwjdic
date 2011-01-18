@@ -23,7 +23,7 @@ Xwjdic.controllers :jmdict do
     ].each do |mapping|
     # get mapping[:sym], :map => mapping[:path] do
     get mapping[:path] do
-      query = params[:query]
+      query = params[:query].strip
       if params[:start]
         start = params[:start].to_i
       else

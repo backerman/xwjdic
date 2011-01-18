@@ -9,7 +9,12 @@
   = partial "kanji/searchbar", :locals => {:query => query}
   - if error
     .error= error_message
-  = partial "pagebar", :locals => paging
-  = partial "kanji/result", :collection => results, |
-      :locals => { :detail_url => detail_url}          |
-  = partial "pagebar", :locals => paging
+  - if query.empty?
+    %p.ui-state-highlight.ui-corner-all
+      %span.ui-icon.ui-icon-info{:style => "float: left; margin-right: 0.3em;"}
+      Please enter a query above.
+  - else
+    = partial "pagebar", :locals => paging
+    = partial "kanji/result", :collection => results, |
+        :locals => { :detail_url => detail_url}       |
+    = partial "pagebar", :locals => paging

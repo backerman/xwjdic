@@ -140,6 +140,7 @@ EOF
     end
     
     if new_session
+      logger.debug "Session ID is now #{new_session.inspect}."
       retval[:session_id] = new_session
     end
     

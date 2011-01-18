@@ -44,3 +44,19 @@ declare function jdic:set-attribute($name as xs:string, $value as item()*)
         then session:set-attribute($name, $value)
         else ()
 };
+
+(: Remove wildcards and punctuation from a string. :)
+declare function jdic:strip-string($str as xs:string) as xs:string
+{
+  let $strip-regex := jdic:strip-regex()
+  let $no-stops :=    replace($str, $strip-regex, "")
+  return replace($no-stops, "[\p{P}\p{Z}]+", "")
+};
+
+(: Regex matching any of the stop words used by Lucene :)
+declare function jdic:strip-regex() as xs:string
+{
+  concat("\W(a|an|and|are|as|at|be|but|by|for|if|in|into|is|it|no|not|",
+         "of|on|or|such|that|the|their|then|there|these|they|this|to|was|",
+         "will|with)\W")
+};

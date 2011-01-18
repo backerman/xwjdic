@@ -13,17 +13,12 @@ declare function local:get-matches() as element()*
             else local:query-matches-and-save()
 };
 
-declare function local:strip-string($str as xs:string)
-{
-  replace($str, "[?*.]+", "")
-};
-
 declare function local:is-match($elem as element(), $langs as xs:string+,
                                 $search-term as xs:string) 
     as xs:boolean
 {
     let $match-elem := $elem//exist:match[
-        contains(local:strip-string(.), local:strip-string($search-term))]
+        contains(jdic:strip-string(.), jdic:strip-string($search-term))]
     return ($match-elem/ancestor::literal or 
             $match-elem/ancestor::codepoint or 
             $match-elem/ancestor::radical or

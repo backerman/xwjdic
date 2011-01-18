@@ -4,6 +4,7 @@
   })
 .searchbar
   %form{:"accept-charset" => "utf-8", :method => "get", :action => url_for(:kanji, :search) }
-    %input#query{ :type => "text", :name => "query", :value => query, |
-                  :placeholder=> "Enter your search term"}            |
-    %input#search_button{ :type => "submit", :value => "Search &rarr;" }
+    .ui-widget
+      %input#query{ :type => "text", :name => "query", :value => query, |
+                    :placeholder=> "Enter your search term"}            |
+      %input#search_button{ :type => "submit", :value => "Search &rarr;" }

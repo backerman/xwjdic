@@ -14,7 +14,7 @@ Xwjdic.controllers :jmdict do
   JMDICT_SESSION_ID    = :jmdict_query_session
   
   get :index do
-    render 'jmdict/index'
+    redirect "/jmdict/text/"
   end
   
   [{:sym => :text, :path => '/text/:query'},

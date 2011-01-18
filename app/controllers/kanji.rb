@@ -4,6 +4,10 @@ Xwjdic.controllers :kanji do
   KANJIDIC_SESSION_QUERY   = :kanjidic_query
   KANJIDIC_SESSION_ID      = :kanjidic_query_session
   
+  get :index do
+    redirect "/kanji/text/"
+  end
+  
   [{:sym => :text, :path => '/text/:query'},
     {:sym => :textat, :path => '/text/:query/at/:start'}, 
     {:sym => :textatby, :path => '/text/:query/at/:start/by/:howmany'}

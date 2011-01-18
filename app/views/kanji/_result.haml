@@ -13,4 +13,7 @@
         Name readings: #{result[:nanori]}
     .senses
       = result[:senses].join("; ")
+    .xrefs
+      Cross-references:
+      = partial "kanji/dic_index", :collection => result[:dic_refs]
   .clear

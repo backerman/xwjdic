@@ -1,7 +1,7 @@
 .entry
   .clear
   .sidebar
-    = result[:kanji]
+    .headword= result[:kanji]
     U#{result[:unicode_hex]}
     %a{:href => detail_url + result[:kanji_text], :target => "_blank"}
       (XML)

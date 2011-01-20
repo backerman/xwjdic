@@ -7,5 +7,9 @@
     = stylesheet_link_tag :application
     = stylesheet_link_tag :"cupertino/jquery-ui"
     = javascript_include_tag :application, :jquery, :"jquery-ui"
+    :javascript
+      $(function() {
+        $('input[type="text"]').addClass("ui-corner-all")
+      });
   %body.bp
     .content= yield

@@ -7,3 +7,4 @@ vendor/gems/*
 .sass-cache/*
 public/stylesheets/application.css*
 deploy-config.xml
+config/database.rb

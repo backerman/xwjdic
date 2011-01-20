@@ -17,6 +17,12 @@ Remove "thin" from the Gemfile before deploying with Passenger.
 FreeBSD requires `/usr/ports/converters/ruby-iconv` to be installed for activesupport
 to work properly.
 
+You will need to copy the following configuration templates and edit them appropriately:
+
+* deploy-config.xml.tmpl &rarr; deploy-config.xml
+* config/database.rb.tmpl &rarr; config/database.rb
+
+To deploy the database files to the eXist server, run `ant deploy`.
 
 [1]: http://www.edrdg.org/
 [2]: http://www.blueprintcss.org/

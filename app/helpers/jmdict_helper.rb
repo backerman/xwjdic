@@ -6,12 +6,6 @@ require "typhoeus"
 
 Xwjdic.helpers do
   
-  if production?
-    DB_URL = "http://localhost:8080/db/jdic/"
-  else
-    DB_URL = "http://localhost:8088/db/jdic/"
-  end
-  
   def highlight_matches(gloss)
     matches = gloss.find("exist:match", 
       "exist:http://exist.sourceforge.net/NS/exist")
@@ -100,7 +94,7 @@ Xwjdic.helpers do
   end
   
   def grab_xml(xquery, params)
-    my_url = DB_URL + xquery
+    my_url = options.db_url + xquery
     logger.debug "Querying #{my_url} with parms #{params.inspect}"
     response = Typhoeus::Request.get(my_url,
                                     :params => params)

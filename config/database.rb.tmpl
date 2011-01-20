@@ -1,0 +1,7 @@
+configure :development do
+  set :dburl, 'http://localhost:8080/exist/db/jdic/'
+end
+
+configure :production do
+  set :dburl, 'http://localhost:8088/db/jdic/'
+end

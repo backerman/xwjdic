@@ -1,5 +1,13 @@
 :javascript
   $(function() {
+    var updateSummary = function () {
+      // Update summary.
+      var selected = $("#language-select :checked").map(function () {
+        return $("label[for=\"" + this.id + "\"]").text();
+      });
+      $("#current-languages").text(selected.toArray().join(", "));
+    };
+    
     $("#search_button").button();
     $("#query").autocomplete({
             source: "#{url_for(:jmdict, :autocomplete)}",
@@ -10,11 +18,32 @@
                 window.location = "/jmdict/text/" + ui.item.value;
               }
             }
-    })
-  })
+    });
+    $("#language-select").buttonset().click(updateSummary);
+    $("#search-rollup").click(function () {
+      $("#search-rollup").toggleClass(
+          "ui-icon-circle-triangle-s ui-icon-circle-triangle-e");
+      $(".search-settings .summary,.search-settings .full").toggle();
+    });
+    
+    updateSummary();
+  });
 .searchbar
-  %form{:"accept-charset" => "utf-8", :method => "get", :action => url_for(:jmdict, :search) }
+  %form{:"accept-charset" => "utf-8", :method => "get", |
+        :action => url_for(:jmdict, :search) }          |
     .ui-widget
       %input#query{ :type => "text", :name => "query", :value => query, |
       :placeholder=> "Enter your search term"}                          |
       %input#search_button{ :type => "submit", :value => "Search &rarr;" }
+      .search-settings
+        %span.ui-icon.ui-icon-circle-triangle-s#search-rollup
+        %span.summary
+          Current languages:
+          %span#current-languages
+        %span.full
+          %span &nbsp;
+          %span#language-select
+            - for lang in langs
+              %input{:type => "checkbox", :name => lang[:code],                 |
+                      :id => "lang-#{lang[:code]}", :checked => lang[:checked]} |
+              %label{:for => "lang-#{lang[:code]}"}= lang[:name]

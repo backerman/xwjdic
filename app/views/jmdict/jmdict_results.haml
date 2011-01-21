@@ -6,7 +6,7 @@
     $(".entry:even").addClass("striped");
   });
 .two-col
-  = partial "jmdict/searchbar", :locals => {:query => query}
+  = partial "jmdict/searchbar", :locals => {:query => query, :langs => langs}
   - if error
     .error= error_message
   - if query.empty?

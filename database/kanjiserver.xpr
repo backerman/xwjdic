@@ -13,6 +13,7 @@
         <file name="jdic.xqm"/>
         <file name="jmdict-entry.xq"/>
         <file name="jmdict-languages.xq"/>
+        <file name="kanji-languages.xq"/>
         <file name="kanji-query.xq"/>
     </projectTree>
 </project>

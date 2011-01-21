@@ -5,6 +5,8 @@ require "libxml"
 require "typhoeus"
 
 Xwjdic.helpers do
+
+  @@lang_lock = Mutex.new
   
   def highlight_matches(gloss)
     matches = gloss.find("exist:match", 
@@ -93,7 +95,7 @@ Xwjdic.helpers do
     results
   end
   
-  def grab_xml(xquery, params)
+  def grab_xml(xquery, params={})
     my_url = options.db_url + xquery
     logger.debug "Querying #{my_url} with parms #{params.inspect}"
     response = Typhoeus::Request.get(my_url,
@@ -141,4 +143,22 @@ EOF
     retval
   end
   
+  def init_jmdict_langs
+    # Grab list of available languages.
+    @@lang_lock.synchronize do
+      langs_response = grab_xml(JMDICT_AVAIL_LANGUAGES)
+      xml = langs_response[:xml]
+      langs = xml.find("//language")
+      languages = []
+      langs.each do |lang|
+        logger.debug "Putting #{lang.inspect}"
+        languages.push lang.content
+      end
+      logger.debug "Trying to set #{languages.inspect}"
+      set :jmdict_langs, languages
+      set :jmdict_langs, "fuu"
+      logger.debug "Available languages are: #{options.jmdict_langs.inspect}"
+      logger.debug "Options are: #{options.inspect}"
+    end
+  end
 end

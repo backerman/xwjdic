@@ -10,9 +10,10 @@ Xwjdic.controllers :jmdict do
   
   JMDICT_SEARCH = "jmdict-entry.xq"
   JMDICT_AUTOCOMPLETE = "autocomplete.xq"
+  JMDICT_AVAIL_LANGUAGES = "jmdict-languages.xq"
   JMDICT_SESSION_QUERY = :jmdict_query
   JMDICT_SESSION_ID    = :jmdict_query_session
-  
+    
   get :index do
     redirect "/jmdict/text/"
   end

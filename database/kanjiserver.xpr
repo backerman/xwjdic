@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="11.2">
+<project version="12.1">
     <meta>
         <filters directoryPatterns="" filePatterns=""
             positiveFilePatterns="" showHiddenFiles="false"/>
@@ -12,6 +12,7 @@
         <file name="indices.xq"/>
         <file name="jdic.xqm"/>
         <file name="jmdict-entry.xq"/>
+        <file name="jmdict-languages.xq"/>
         <file name="kanji-query.xq"/>
     </projectTree>
 </project>

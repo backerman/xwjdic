@@ -49,13 +49,14 @@
   </target>
   
   <target name="deploy-xquery">
-    <echo message="Deploying stored XQueries"/>
+    <echo message="Deploying stored XQueries and language map"/>
     <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.uri}"
         createcollection="true" user="${deploy.user}"
         password="${deploy.pass}">
         <fileset dir="${xquery.dir}"> 
             <include name="*.xq"/>
             <include name="*.xqm"/>
+            <include name="*.xml"/>
         </fileset>
     </xdb:store>
     <xdb:store xmlns:xdb="http://exist-db.org/ant" uri="${db.config.uri}"

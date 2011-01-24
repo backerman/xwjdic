@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-codes>
+    <!-- This file contains mappings between ISO-639-1 and ISO-639-2 codes, 
+         as used in the EDRDG dictionary files, and their English- and
+         native-language expansions. -->
+    <language>
+        <code std="iso-639-1">en</code>
+        <code std="iso-639-2">eng</code>
+        <name xml:lang="en">English</name>
+        <name>English</name>
+    </language>
+    <language>
+        <code std="iso-639-1">fr</code>
+        <code std="iso-639-2">fre</code>
+        <name xml:lang="en">French</name>
+        <name>Français</name>
+    </language>
+    <language>
+        <code std="iso-639-1">de</code>
+        <code std="iso-639-2">ger</code>
+        <name xml:lang="en">German</name>
+        <name>Deutsch</name>
+    </language>
+    <language>
+        <code std="iso-639-1">ru</code>
+        <code std="iso-639-2">rus</code>
+        <name xml:lang="en">Russian</name>
+        <name>Русский</name>
+    </language>
+    <language>
+        <code std="iso-639-1">es</code>
+        <code std="iso-639-2">spa</code>
+        <name xml:lang="en">Spanish</name>
+        <name>Español</name>
+    </language>
+    <language>
+        <code std="iso-639-1">pt</code>
+        <code std="iso-639-2">por</code>
+        <name xml:lang="en">Portuguese</name>
+        <name>Português</name>
+    </language>
+</language-codes>

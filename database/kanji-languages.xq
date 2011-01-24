@@ -4,6 +4,9 @@
 let $langs := distinct-values(/kanjidic2//meaning/@m_lang | <lang>en</lang>)
 return <languages>
 { for $lang in $langs 
-  return <language>{$lang}</language>
+  return <language>
+            <code>{$lang}</code>
+            {/language-codes/language[code[@std="iso-639-1"]=$lang]/name}
+         </language>
 }
 </languages>

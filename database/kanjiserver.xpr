@@ -15,5 +15,6 @@
         <file name="jmdict-languages.xq"/>
         <file name="kanji-languages.xq"/>
         <file name="kanji-query.xq"/>
+        <file name="language-codes.xml"/>
     </projectTree>
 </project>

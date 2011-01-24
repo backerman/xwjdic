@@ -13,8 +13,9 @@ gem 'shoulda', :group => "test"
 gem 'rack-test', :require => 'rack/test', :group => 'test'
 
 # Padrino
-gem 'padrino', ">= 0.9.14"
-gem 'sinatra', '1.1.0'
+gem 'padrino', ">= 0.9.20"
+gem 'padrino-cache'
+gem 'sinatra'
 
 # xwjdic requirements
 gem 'cookiejar'

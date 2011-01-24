@@ -5,9 +5,10 @@ require "libxml"
 require "typhoeus"
 
 Xwjdic.helpers do
-
-  @@lang_lock = Mutex.new
   
+  @@lang_lock = Mutex.new
+  @@jmdict_langs = nil
+
   def highlight_matches(gloss)
     matches = gloss.find("exist:match", 
       "exist:http://exist.sourceforge.net/NS/exist")
@@ -143,22 +144,30 @@ EOF
     retval
   end
   
-  def init_jmdict_langs
-    # Grab list of available languages.
-    @@lang_lock.synchronize do
-      langs_response = grab_xml(JMDICT_AVAIL_LANGUAGES)
-      xml = langs_response[:xml]
-      langs = xml.find("//language")
-      languages = []
-      langs.each do |lang|
-        logger.debug "Putting #{lang.inspect}"
-        languages.push lang.content
+  # Grab list of available languages.
+  def jmdict_avail_langs
+    if @@jmdict_langs
+      @@jmdict_langs
+    else
+      @@lang_lock.synchronize do
+        if @@jmdict_langs
+          @@jmdict_langs
+        else
+          langs_response = grab_xml(JMDICT_AVAIL_LANGUAGES)
+          xml = langs_response[:xml]
+          langs = xml.find("//language")
+          languages = []
+          langs.each do |lang|
+            languages.push({
+              :code => lang.find_first("code").content,
+              :name => lang.find_first("name[not(@xml:lang)]").content
+            })
+          end
+          @@jmdict_langs = languages
+          @@jmdict_langs
+        end
       end
-      logger.debug "Trying to set #{languages.inspect}"
-      set :jmdict_langs, languages
-      set :jmdict_langs, "fuu"
-      logger.debug "Available languages are: #{options.jmdict_langs.inspect}"
-      logger.debug "Options are: #{options.inspect}"
     end
   end
+
 end

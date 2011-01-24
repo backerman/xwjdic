@@ -60,15 +60,15 @@ Xwjdic.controllers :jmdict do
       else
         total_hits = 0
       end
+      langs = jmdict_avail_langs
+      englang = langs.find {|x| x[:code] == "eng"}
+      englang[:checked] = true
       locals =
         {:results => results,
          :query => query,
          :error => error,
           # Placeholder for testing
-         :langs => [{ :name => "English", :code => "eng", :checked => true },
-                    { :name => "Deutsch", :code => "ger", :checked => false },
-                    { :name => "Français", :code => "fra", :checked => true },
-                    { :name => "Русский", :code => "rus", :checked => false }],
+         :langs => langs,
          :detail_url => "/jmdict/detail/",
          :paging => {
            :start_num => start,

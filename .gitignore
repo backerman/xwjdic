@@ -8,3 +8,4 @@ vendor/gems/*
 public/stylesheets/application.css*
 deploy-config.xml
 config/database.rb
+Gemfile.lock

@@ -1,5 +1,7 @@
 # xwjdic (temporary name) v0.01 #
 
+_This project is totally stale so I'm archiving it. -BSA 2020-05-21_
+
 This is a (currently highly experimental) front end for the JMDict/KANJIDIC2/JMnedict files maintained by the [Electronic Dictionary Research and Development Group][1] at Monash University.  It is written from scratch using XQuery and Ruby, and does not use any of the legacy jdic code base.
 
 My design goals for this system:
